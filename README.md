@@ -98,7 +98,7 @@
 
 ### 在線使用
 
-訪問 [GitHub Pages 鏈接](https://你的用戶名.github.io/倉庫名稱/) 即可直接使用
+訪問 [GitHub Pages 鏈接](https://NMAzusa0125.github.io/gemini-quiz/) 即可直接使用
 
 ### 本地運行
 
@@ -201,7 +201,7 @@
 - 功能 Bug
 - UI/UX 改進建議
 
-請在 [Issues](https://github.com/你的用戶名/倉庫名稱/issues) 中提出!
+請在 [Issues](https://github.com/NMAzusa0125/gemini-quiz/issues) 中提出!
 
 ---
 
@@ -240,9 +240,7 @@
 
 ## 📞 聯絡方式
 
-- 📧 Email: your.email@example.com
-- 🐦 Twitter: @yourusername
-- 💼 LinkedIn: your-profile
+- 📧 Email: kcazusa1225@gmail.com
 
 ---
 
