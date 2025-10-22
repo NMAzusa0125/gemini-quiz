@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content-width, initial-scale=1.0">
+    <title>Gemini Certification for Educators - 完整版練習</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        #root {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .app-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e9ecef;
+            background: #f8f9fa;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #6c757d;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            background: white;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .tab:hover {
+            background: #e9ecef;
+        }
+        
+        .content {
+            padding: 30px;
+            min-height: 400px;
+        }
+        
+        .language-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+        
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .question-type-badge {
+            background: #ffc107;
+            color: #212529;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .category-badge {
+            background: #764ba2;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #212529;
+        }
+        
+        .question-english {
+            font-size: 16px;
+            color: #6c757d;
+            font-style: italic;
+            margin-top: 10px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .multi-select-hint {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            color: #856404;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #dee2e6;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .option.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .option.partial-correct {
+            background: #ffc107;
+            color: #212529;
+            border-color: #ffc107;
+        }
+        
+        .option-label {
+            min-width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.selected .option-label,
+        .option.correct .option-label,
+        .option.incorrect .option-label,
+        .option.partial-correct .option-label {
+            background: rgba(255,255,255,0.3);
+            color: white;
+        }
+        
+        .option.partial-correct .option-label {
+            color: #212529;
+        }
+        
+        .option-content {
+            flex: 1;
+        }
+        
+        .option-text {
+            display: block;
+            line-height: 1.6;
+        }
+        
+        .option-english {
+            display: block;
+            font-size: 14px;
+            margin-top: 8px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+        
+        .explanation {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .explanation.wrong {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+        
+        .explanation.partial {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .explanation h4 {
+            color: #155724;
+            margin-bottom: 8px;
+        }
+        
+        .explanation.wrong h4 {
+            color: #721c24;
+        }
+        
+        .explanation.partial h4 {
+            color: #856404;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .knowledge-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .knowledge-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .knowledge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+        }
+        
+        .knowledge-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .knowledge-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .knowledge-card li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .knowledge-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .result-card {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .result-score {
+            font-size: 72px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .result-message {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .pass {
+            color: #28a745;
+        }
+        
+        .fail {
+            color: #dc3545;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .wrong-answers {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px solid #dc3545;
+        }
+        
+        .wrong-answers h3 {
+            color: #dc3545;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .wrong-question-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .wrong-question-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .wrong-question-item .your-answer {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .wrong-question-item .correct-answer {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .exam-info {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .exam-info h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-icon {
+            font-size: 24px;
+        }
+        
+        .settings-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .settings-panel h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .setting-item input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        // 完整題庫 - 包含單選、多選、是非題,所有選項長度相近且具迷惑性
+        const allQuestions = [
+            // ===== 是非題 =====
+            {
+                id: 1,
+                type: "truefalse",
+                category: "Gemini 功能",
+                question: "NotebookLM 的 Audio Overview 功能可以自訂音訊長度(較短、預設、較長)。",
+                questionEn: "NotebookLM's Audio Overview feature allows customization of audio length (shorter, default, longer).",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [0],
+                explanation: "正確。NotebookLM 允許使用者在生成面板中選擇 Audio Overview 的長度。目前這個功能僅支援英文音訊生成。"
+            },
+            {
+                id: 2,
+                type: "truefalse",
+                category: "負責任使用 AI",
+                question: "使用 Google Workspace for Education 帳戶時,學生的資料可能會被用於廣告目的。",
+                questionEn: "When using Google Workspace for Education accounts, student data may be used for advertising purposes.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [1],
+                explanation: "錯誤。Google 明確承諾保護使用 Workspace for Education 帳戶的學生隱私,絕不會將資料用於廣告或建立個人檔案。這是教育環境中使用 AI 的重要保障。"
+            },
+            {
+                id: 3,
+                type: "truefalse",
+                category: "理解生成式 AI",
+                question: "生成式 AI 的主要功能是創造新內容,而傳統搜尋引擎的主要功能是檢索現有內容。",
+                questionEn: "The primary function of generative AI is to create new content, while traditional search engines primarily retrieve existing content.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [0],
+                explanation: "正確。這是生成式 AI 與搜尋引擎的根本差異。生成式 AI 基於訓練資料創造新的內容,而搜尋引擎是找出並顯示網路上已存在的內容。"
+            },
+            {
+                id: 4,
+                type: "truefalse",
+                category: "Gemini 功能",
+                question: "Gems 功能允許教師儲存自訂指令模組,之後可以重複使用於類似任務。",
+                questionEn: "The Gems feature allows teachers to save custom instruction modules for reuse in similar tasks.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [0],
+                explanation: "正確。Gems 是可重複使用的自訂指令集,能讓教師儲存詳細的提示詞範本,大幅提升重複性任務的效率。"
+            },
+            
+            // ===== 單選題(選項長度相近且具迷惑性) =====
+            {
+                id: 5,
+                type: "single",
+                category: "理解生成式 AI",
+                question: "在生成式 AI 的語境中,「幻覺」(Hallucination)是指什麼現象?",
+                questionEn: "In the context of generative AI, what does 'hallucination' refer to?",
+                options: [
+                    "AI 模型產生看似可信但實際上不正確或完全虛構的資訊內容",
+                    "AI 系統因為運算負載過高而暫時無法回應使用者的查詢請求",
+                    "AI 在處理複雜問題時會自動進入深度思考模式以提高準確性",
+                    "AI 模型拒絕回答涉及敏感話題的問題以保護使用者隱私安全"
+                ],
+                optionsEn: [
+                    "AI generates information that appears credible but is actually incorrect or completely fabricated",
+                    "AI system temporarily cannot respond to user queries due to high computational load",
+                    "AI automatically enters deep thinking mode when handling complex problems to improve accuracy",
+                    "AI refuses to answer questions on sensitive topics to protect user privacy and security"
+                ],
+                correct: [0],
+                explanation: "AI 幻覺是指模型生成看似合理但實際上不正確或完全虛構的內容。這是使用 AI 時必須警惕的現象,教育工作者必須教導學生始終驗證 AI 產生的資訊。"
+            },
+            {
+                id: 6,
+                type: "single",
+                category: "提示詞工程",
+                question: "在 PARTS 提示詞框架中,'A' 代表什麼要素?",
+                questionEn: "In the PARTS prompt framework, what does 'A' represent?",
+                options: [
+                    "Audience - 明確定義目標受眾及其知識背景與需求特徵",
+                    "Action - 描述 AI 需要執行的具體動作與操作步驟流程",
+                    "Analysis - 指定 AI 應該採用的分析方法與評估標準框架",
+                    "Algorithm - 說明 AI 處理問題時應該遵循的演算法邏輯"
+                ],
+                optionsEn: [
+                    "Audience - clearly define target audience and their knowledge background and needs",
+                    "Action - describe specific actions and operational procedures AI needs to perform",
+                    "Analysis - specify analytical methods and evaluation criteria framework AI should use",
+                    "Algorithm - explain algorithmic logic AI should follow when processing problems"
+                ],
+                correct: [0],
+                explanation: "在 PARTS 框架中,A 代表 Audience(受眾)。完整框架為:Purpose(目的)、Audience(受眾)、Role(角色)、Task(任務)、Steps(步驟)。明確定義受眾能幫助 AI 調整回應的複雜度、語氣和內容深度。"
+            },
+            {
+                id: 7,
+                type: "single",
+                category: "工具選擇",
+                question: "教師需要快速總結並整合分析五篇不同的學術研究論文,應該使用哪個工具最合適?",
+                questionEn: "Which tool is most suitable for teachers to quickly summarize and integrate analysis of five different academic research papers?",
+                options: [
+                    "NotebookLM - 上傳所有論文後進行跨文件綜合分析與主題整合",
+                    "Gemini App - 分別處理每篇論文然後手動整合所有生成的摘要",
+                    "Gemini in Gmail - 透過電子郵件附件功能處理並分享研究論文",
+                    "Gemini in Slides - 直接在簡報中逐一生成每篇論文的摘要內容"
+                ],
+                optionsEn: [
+                    "NotebookLM - upload all papers for cross-document comprehensive analysis and theme integration",
+                    "Gemini App - process each paper separately then manually integrate all generated summaries",
+                    "Gemini in Gmail - process and share research papers through email attachment functionality",
+                    "Gemini in Slides - directly generate summary content for each paper one by one in presentations"
+                ],
+                correct: [0],
+                explanation: "NotebookLM 最適合這個任務。它可以同時處理多個來源文件,進行跨文件分析,識別主題連結,並提供綜合摘要,這正是文獻回顧和研究整合所需的功能。"
+            },
+            {
+                id: 8,
+                type: "single",
+                category: "實作應用",
+                question: "教師想為具有不同學習需求的學生(IEP、ESL、資優)建立可重複使用的差異化教材生成系統,最有效的方法是?",
+                questionEn: "What's the most effective way for teachers to create a reusable differentiated materials generation system for students with different learning needs (IEP, ESL, gifted)?",
+                options: [
+                    "建立包含學習目標、差異化策略、格式要求等完整參數的 Gem 以便重複使用",
+                    "每次需要時在 Gemini App 中重新輸入完整的提示詞和所有具體要求",
+                    "使用 NotebookLM 上傳過去的教材範例讓 AI 學習並自動生成新內容",
+                    "在 Google Docs 中建立標準範本然後使用 Gemini in Docs 逐次修改"
+                ],
+                optionsEn: [
+                    "Create a Gem with complete parameters including learning objectives, differentiation strategies, format requirements for reuse",
+                    "Re-enter complete prompts and all specific requirements in Gemini App each time needed",
+                    "Use NotebookLM to upload past material examples for AI to learn and automatically generate new content",
+                    "Create standard templates in Google Docs then modify sequentially using Gemini in Docs"
+                ],
+                correct: [0],
+                explanation: "建立專門的 Gem 最有效率。Gem 可以儲存所有固定參數(如核心目標、IEP 適配策略、ESL 語言支持、資優延伸活動、格式要求等),之後只需啟動 Gem 並提供變化的主題,大幅節省時間並確保一致性。"
+            },
+            {
+                id: 9,
+                type: "single",
+                category: "Gemini 功能",
+                question: "Deep Research 功能與一般 Gemini 對話的主要差異在於什麼?",
+                questionEn: "What is the main difference between the Deep Research feature and regular Gemini conversations?",
+                options: [
+                    "Deep Research 會系統性地爬取多個網路來源並生成結構化的長篇綜合研究報告",
+                    "Deep Research 提供更快的回應速度和更簡潔的答案以節省使用者閱讀時間",
+                    "Deep Research 專注於單一權威來源以確保資訊的準確性和可靠性品質",
+                    "Deep Research 使用更先進的 AI 模型因此需要付費訂閱才能完整使用"
+                ],
+                optionsEn: [
+                    "Deep Research systematically crawls multiple web sources and generates structured long-form comprehensive research reports",
+                    "Deep Research provides faster response times and more concise answers to save users reading time",
+                    "Deep Research focuses on single authoritative sources to ensure information accuracy and reliability",
+                    "Deep Research uses more advanced AI models therefore requires paid subscription for full access"
+                ],
+                correct: [0],
+                explanation: "Deep Research 專門設計用於深度研究任務,會系統性地探索多個來源,整合資訊並產出結構化的長篇報告,而不只是簡單的對話式回答。這特別適合需要綜合多個來源的研究任務。"
+            },
+            {
+                id: 10,
+                type: "single",
+                category: "負責任使用 AI",
+                question: "當 AI 生成的內容包含明顯錯誤時,教師採取哪種做法最能促進學生的學習?",
+                questionEn: "When AI-generated content contains obvious errors, which approach best promotes student learning?",
+                options: [
+                    "將錯誤內容作為批判性思考教學的契機,引導學生識別和驗證資訊真偽",
+                    "立即刪除錯誤內容並禁止學生使用該 AI 工具以防止錯誤資訊擴散",
+                    "直接提供正確答案給學生並要求他們記憶避免未來再次犯相同錯誤",
+                    "向 AI 開發公司提出正式投訴並要求技術團隊立即修正系統缺陷問題"
+                ],
+                optionsEn: [
+                    "Use error content as an opportunity to teach critical thinking, guiding students to identify and verify information authenticity",
+                    "Immediately delete error content and prohibit students from using that AI tool to prevent misinformation spread",
+                    "Directly provide correct answers to students and require memorization to avoid future same mistakes",
+                    "File formal complaint with AI developer and request technical team to immediately fix system defects"
+                ],
+                correct: [0],
+                explanation: "將錯誤轉化為教學機會最有價值。這能教導學生資訊素養、事實查核技巧和批判性思考能力,這些技能在 AI 時代比單純獲得正確答案更重要。"
+            },
+            
+            // ===== 多選題(需要選擇多個正確答案) =====
+            {
+                id: 11,
+                type: "multiple",
+                category: "負責任使用 AI",
+                question: "審查 Gemini 產生的教學內容時,教師應該評估哪些關鍵因素?(選擇所有適用選項)",
+                questionEn: "When reviewing Gemini-generated instructional content, which key factors should teachers evaluate? (Select all that apply)",
+                options: [
+                    "檢查內容中是否存在文化、性別或種族偏見以確保公平性與包容性",
+                    "驗證所有陳述的事實準確性並與可靠來源進行交叉核對比較確認",
+                    "評估內容的語言複雜度是否適合特定年齡層學生的認知發展水平",
+                    "確認內容的美學設計和排版格式符合學校品牌視覺識別系統規範"
+                ],
+                optionsEn: [
+                    "Check for cultural, gender, or racial biases in content to ensure fairness and inclusivity",
+                    "Verify factual accuracy of all statements and cross-check with reliable sources for confirmation",
+                    "Evaluate whether language complexity is appropriate for cognitive development level of specific age group",
+                    "Confirm aesthetic design and layout format of content meets school brand visual identity system standards"
+                ],
+                correct: [0, 1, 2],
+                explanation: "選項 A、B、C 都是審查 AI 內容的關鍵因素。教師必須檢查偏見(A)、驗證事實(B)、評估適齡性(C)。選項 D(美學設計)雖然重要,但不是審查 AI 內容準確性和適切性的核心考量。"
+            },
+            {
+                id: 12,
+                type: "multiple",
+                category: "提示詞工程",
+                question: "以下哪些策略能有效改善 AI 提示詞的輸出品質?(選擇所有適用選項)",
+                questionEn: "Which strategies can effectively improve AI prompt output quality? (Select all that apply)",
+                options: [
+                    "提供 2-3 個具體範例示範期望的輸出格式、風格和內容深度標準",
+                    "將複雜任務分解為多個循序漸進的步驟並要求 AI 逐步執行完成",
+                    "明確指定 AI 應該扮演的專業角色及其應具備的知識背景領域",
+                    "使用盡可能多的專業術語和複雜句型以展現提示詞的專業水準"
+                ],
+                optionsEn: [
+                    "Provide 2-3 specific examples demonstrating expected output format, style and content depth standards",
+                    "Break complex tasks into multiple sequential steps and require AI to execute them progressively",
+                    "Clearly specify professional role AI should play and knowledge background domain it should possess",
+                    "Use as many technical terms and complex sentence patterns as possible to demonstrate prompt professionalism"
+                ],
+                correct: [0, 1, 2],
+                explanation: "選項 A(提供範例-Few-shot learning)、B(步驟分解)、C(角色定義)都是有效策略。選項 D 錯誤:清晰簡潔比過度複雜更重要,過多術語可能降低提示詞效果。"
+            },
+            {
+                id: 13,
+                type: "multiple",
+                category: "Gemini 功能",
+                question: "NotebookLM 可以處理哪些類型的來源文件?(選擇所有適用選項)",
+                questionEn: "What types of source documents can NotebookLM process? (Select all that apply)",
+                options: [
+                    "PDF 格式的學術論文、研究報告和電子書籍文件檔案",
+                    "Google Docs 和 Microsoft Word 格式的文字處理文件內容",
+                    "YouTube 影片的逐字稿內容和網頁文章的完整文字資料",
+                    "即時視訊會議的直播串流和社群媒體的動態更新內容"
+                ],
+                optionsEn: [
+                    "PDF format academic papers, research reports and e-book document files",
+                    "Google Docs and Microsoft Word format text processing document content",
+                    "YouTube video transcripts and complete text data from web articles",
+                    "Live streaming from real-time video conferences and dynamic social media updates"
+                ],
+                correct: [0, 1, 2],
+                explanation: "NotebookLM 支援 PDF(A)、Google Docs/Word(B)、YouTube 逐字稿和網頁(C)。選項 D 錯誤:NotebookLM 不處理即時串流或動態更新,只處理靜態的文件內容。"
+            },
+            {
+                id: 14,
+                type: "multiple",
+                category: "實作應用",
+                question: "Gemini 與 Google Workspace 整合能為教師帶來哪些實質好處?(選擇所有適用選項)",
+                questionEn: "What substantial benefits can Gemini integration with Google Workspace bring to teachers? (Select all that apply)",
+                options: [
+                    "在 Gmail 中直接生成和回覆郵件無需切換應用程式提升溝通效率",
+                    "在 Docs 中即時協助撰寫和編輯文件內容加速教材製作流程速度",
+                    "在 Slides 中快速生成簡報內容和設計建議縮短備課時間成本",
+                    "自動同步所有學生的學習進度數據並生成個人化學習路徑建議"
+                ],
+                optionsEn: [
+                    "Generate and reply to emails directly in Gmail without switching apps, improving communication efficiency",
+                    "Assist in writing and editing document content in real-time in Docs, accelerating teaching material production",
+                    "Quickly generate presentation content and design suggestions in Slides, reducing lesson prep time",
+                    "Automatically sync all student learning progress data and generate personalized learning path recommendations"
+                ],
+                correct: [0, 1, 2],
+                explanation: "Gemini 整合帶來 Gmail 郵件協助(A)、Docs 文件編輯(B)、Slides 簡報生成(C)的好處。選項 D 錯誤:Gemini 不自動追蹤學生進度或生成學習路徑,這些需要其他工具如 Classroom。"
+            },
+            {
+                id: 15,
+                type: "multiple",
+                category: "負責任使用 AI",
+                question: "教導學生負責任地使用 AI 工具時,應該培養哪些關鍵能力?(選擇所有適用選項)",
+                questionEn: "When teaching students to use AI tools responsibly, which key competencies should be developed? (Select all that apply)",
+                options: [
+                    "批判性評估 AI 輸出內容的能力包括識別錯誤、偏見和不當資訊",
+                    "理解何時應該引用 AI 來源並遵守學術誠信和智慧財產權規範",
+                    "認識 AI 工具的局限性並知道何時需要人類專業判斷與決策介入",
+                    "完全依賴 AI 建議以確保獲得最快速最有效率的問題解決方案"
+                ],
+                optionsEn: [
+                    "Critically evaluate AI output content including identifying errors, biases and inappropriate information",
+                    "Understand when to cite AI sources and comply with academic integrity and intellectual property norms",
+                    "Recognize AI tool limitations and know when human professional judgment and decision-making is needed",
+                    "Completely rely on AI suggestions to ensure fastest and most efficient problem-solving solutions"
+                ],
+                correct: [0, 1, 2],
+                explanation: "應該培養批判性思考(A)、學術誠信(B)、認識 AI 局限(C)。選項 D 錯誤:完全依賴 AI 恰恰是應該避免的,教育目標是培養學生的判斷力而非依賴性。"
+            },
+            {
+                id: 16,
+                type: "single",
+                category: "理解生成式 AI",
+                question: "在機器學習中,「訓練資料集」扮演什麼角色?",
+                questionEn: "What role does a 'training dataset' play in machine learning?",
+                options: [
+                    "提供標註的範例資料讓模型學習識別模式並建立預測能力的基礎",
+                    "用於最終測試已訓練完成的模型在真實世界場景中的實際表現",
+                    "儲存使用者與 AI 互動的歷史記錄以便未來查詢和審核使用情況",
+                    "記錄模型運算過程中產生的所有錯誤和異常狀況以供除錯使用"
+                ],
+                optionsEn: [
+                    "Provide labeled example data for models to learn pattern recognition and establish predictive capabilities",
+                    "Used for final testing of trained model performance in real-world scenarios",
+                    "Store historical records of user-AI interactions for future queries and usage audits",
+                    "Record all errors and anomalies generated during model computation for debugging purposes"
+                ],
+                correct: [0],
+                explanation: "訓練資料集提供標註的資訊,用於教導機器學習模型識別模式、做出預測。選項 B 描述的是測試資料集,C 和 D 不是訓練資料集的主要功能。"
+            },
+            {
+                id: 17,
+                type: "single",
+                category: "實作應用",
+                question: "教師想建立一個可重複使用的週報生成系統,包含固定的報告結構和格式要求,最佳做法是?",
+                questionEn: "What's the best practice for teachers to create a reusable weekly report generation system with fixed report structure and format requirements?",
+                options: [
+                    "建立包含報告結構、必要欄位、格式規範的 Gem 然後每週只需提供內容要點",
+                    "每週手動在 Gemini App 中重新輸入完整的報告格式要求和所有細節規範",
+                    "使用 NotebookLM 上傳過去的週報範例讓系統自動學習並生成新的報告",
+                    "在 Google Docs 中建立空白範本每週手動填寫內容而不使用 AI 協助"
+                ],
+                optionsEn: [
+                    "Create Gem with report structure, required fields, format specifications then only provide content points weekly",
+                    "Manually re-enter complete report format requirements and all detail specifications in Gemini App weekly",
+                    "Use NotebookLM to upload past weekly report examples for system to automatically learn and generate new reports",
+                    "Create blank template in Google Docs and manually fill content weekly without using AI assistance"
+                ],
+                correct: [0],
+                explanation: "建立 Gem 最有效率。可以儲存所有固定元素(結構、格式、必要欄位),每週只需啟動 Gem 並提供當週的內容要點,確保一致性同時節省時間。"
+            },
+            {
+                id: 18,
+                type: "single",
+                category: "Gemini 功能",
+                question: "Gemini 的 'Guided Learning' 功能的主要教學價值在於什麼?",
+                questionEn: "What is the main educational value of Gemini's 'Guided Learning' feature?",
+                options: [
+                    "透過蘇格拉底式對話引導學生主動探索概念培養深層理解和批判思考能力",
+                    "直接提供標準答案和詳細解釋讓學生能夠快速記憶並通過各種考試測驗",
+                    "自動批改學生作業並生成個人化的成績報告和進步追蹤分析圖表數據",
+                    "建立虛擬學習小組讓學生可以與 AI 和同儕進行即時協作學習討論"
+                ],
+                optionsEn: [
+                    "Guide students to actively explore concepts through Socratic dialogue, fostering deep understanding and critical thinking",
+                    "Directly provide standard answers and detailed explanations for students to quickly memorize and pass exams",
+                    "Automatically grade student work and generate personalized grade reports and progress tracking analytics",
+                    "Create virtual study groups for students to engage in real-time collaborative learning discussions with AI and peers"
+                ],
+                correct: [0],
+                explanation: "Guided Learning 的核心價值是透過對話式引導(類似蘇格拉底教學法)幫助學生主動探索和深入理解知識,而不是直接給答案。這培養批判性思考和問題解決能力。"
+            },
+            {
+                id: 19,
+                type: "single",
+                category: "提示詞工程",
+                question: "什麼是「Few-shot Learning」在提示詞工程中的實際應用方式?",
+                questionEn: "What is the practical application of 'Few-shot Learning' in prompt engineering?",
+                options: [
+                    "在提示詞中提供 2-3 個範例讓 AI 理解期望的輸出格式而不需詳細規則說明",
+                    "使用最少的文字和最簡短的句子來撰寫提示詞以節省系統處理時間資源",
+                    "限制 AI 的回應長度確保輸出內容簡潔扼要不超過指定的字數上限標準",
+                    "減少使用 AI 的頻率次數以避免過度依賴並保持人類獨立思考判斷能力"
+                ],
+                optionsEn: [
+                    "Provide 2-3 examples in prompt for AI to understand expected output format without detailed rule explanations",
+                    "Use minimal text and shortest sentences to write prompts to save system processing time and resources",
+                    "Limit AI response length to ensure output is concise and doesn't exceed specified word count standards",
+                    "Reduce AI usage frequency to avoid over-reliance and maintain human independent thinking and judgment"
+                ],
+                correct: [0],
+                explanation: "Few-shot Learning 是在提示詞中提供少量(通常 2-3 個)具體範例,讓 AI 從範例中學習期望的輸出模式、格式和風格,而不需要詳細解釋所有規則。"
+            },
+            {
+                id: 20,
+                type: "single",
+                category: "Gemini 功能",
+                question: "NotebookLM 的「來源接地」(Source Grounding)概念的主要好處是什麼?",
+                questionEn: "What is the main benefit of NotebookLM's 'Source Grounding' concept?",
+                options: [
+                    "AI 回應嚴格基於使用者上傳的特定文件大幅降低幻覺風險提高準確性",
+                    "系統會自動連接網路搜尋最新資訊確保所有回答都包含最新數據內容",
+                    "使用者上傳的文件會被永久儲存在雲端伺服器方便隨時存取歷史資料",
+                    "AI 會分析使用者的學習習慣和偏好自動調整回應風格符合個人需求"
+                ],
+                optionsEn: [
+                    "AI responses strictly based on user-uploaded specific documents, significantly reducing hallucination risk and improving accuracy",
+                    "System automatically connects to web searches for latest information ensuring all answers include current data",
+                    "User-uploaded documents permanently stored on cloud servers for convenient access to historical data anytime",
+                    "AI analyzes user learning habits and preferences to automatically adjust response style to personal needs"
+                ],
+                correct: [0],
+                explanation: "來源接地意味著 AI 的回應嚴格基於使用者上傳的文件,而不是從一般訓練資料中提取。這大幅降低了幻覺的風險,提高了準確性和可追溯性。"
+            },
+            {
+                id: 21,
+                type: "multiple",
+                category: "理解生成式 AI",
+                question: "AI 模型可能產生偏見的來源包括哪些?(選擇所有適用選項)",
+                questionEn: "What are the sources from which AI models may develop biases? (Select all that apply)",
+                options: [
+                    "訓練資料本身包含的歷史社會偏見和刻板印象被模型學習並複製",
+                    "資料收集過程中某些群體或觀點被過度代表或代表不足造成失衡",
+                    "模型設計者在選擇訓練資料和優化目標時的個人價值觀和偏好影響",
+                    "使用者硬體設備的運算能力不足導致模型無法正確處理複雜資訊"
+                ],
+                optionsEn: [
+                    "Historical social biases and stereotypes in training data being learned and replicated by models",
+                    "Certain groups or viewpoints being over-represented or under-represented during data collection causing imbalance",
+                    "Model designers' personal values and preferences influencing training data selection and optimization objectives",
+                    "Users' hardware insufficient computational power causing models unable to properly process complex information"
+                ],
+                correct: [0, 1, 2],
+                explanation: "AI 偏見來自:訓練資料中的偏見(A)、資料收集的失衡(B)、設計者的選擇(C)。選項 D 錯誤:硬體性能影響速度但不是偏見的來源。"
+            },
+            {
+                id: 22,
+                type: "single",
+                category: "工具選擇",
+                question: "教師想快速撰寫給家長的重要通知信件包含正式語氣和完整資訊,最合適的工具是?",
+                questionEn: "What is the most suitable tool for teachers to quickly draft important notification letters to parents with formal tone and complete information?",
+                options: [
+                    "Gemini in Gmail 能根據上下文快速生成並調整郵件語氣和內容完整性",
+                    "Gemini in Slides 可以製作專業簡報形式的通知並自動設定版面配置",
+                    "NotebookLM 上傳過去的通知範例後自動學習並生成類似風格信件內容",
+                    "Gemini in Forms 建立線上問卷表單收集家長回應意見和參與確認資訊"
+                ],
+                optionsEn: [
+                    "Gemini in Gmail can quickly generate and adjust email tone and content completeness based on context",
+                    "Gemini in Slides can create professional presentation-format notifications with automatic layout settings",
+                    "NotebookLM uploads past notification examples to automatically learn and generate similar style letter content",
+                    "Gemini in Forms creates online questionnaire forms to collect parent response feedback and participation confirmations"
+                ],
+                correct: [0],
+                explanation: "Gemini in Gmail 最適合此任務。它整合在郵件介面中,可以快速生成或改寫郵件,並能根據指示調整語氣(正式/非正式)和內容完整性。"
+            },
+            {
+                id: 23,
+                type: "single",
+                category: "實作應用",
+                question: "教師想為視覺學習者和聽覺學習者提供相同內容的不同呈現形式,最有效的策略組合是?",
+                questionEn: "What is the most effective strategy combination for teachers to provide different presentation formats of the same content for visual and auditory learners?",
+                options: [
+                    "使用 Gemini 生成文字版教材後用 NotebookLM 的 Audio Overview 轉換為音訊",
+                    "在 Google Slides 中手動製作圖文並茂的簡報同時錄製教師口述解說音檔",
+                    "要求學生根據個人學習風格偏好自行將文字教材轉換為他們需要的格式",
+                    "為所有學生提供完全相同的文字教材讓他們學習適應標準化學習方式"
+                ],
+                optionsEn: [
+                    "Use Gemini to generate text materials then convert to audio with NotebookLM's Audio Overview",
+                    "Manually create illustrated presentations in Google Slides while recording teacher narration audio files",
+                    "Require students to convert text materials into formats they need based on personal learning style preferences",
+                    "Provide all students with identical text materials to help them adapt to standardized learning approaches"
+                ],
+                correct: [0],
+                explanation: "最有效的策略是結合 Gemini(生成高品質文字內容)和 NotebookLM 的 Audio Overview(將內容轉換為對話式音訊)。這種組合自動化且高效,能快速產生兩種格式。"
+            },
+            {
+                id: 24,
+                type: "single",
+                category: "負責任使用 AI",
+                question: "面對學生可能使用 AI 完成作業的情況,教師應該採取什麼樣的評量策略最為適當?",
+                questionEn: "What assessment strategy should teachers adopt when students may use AI to complete assignments?",
+                options: [
+                    "重新設計評量方式著重評估學生的思考過程、AI 使用方式和最終理解深度",
+                    "使用更嚴格的防作弊軟體監控系統完全禁止學生在任何情況下使用 AI 工具",
+                    "降低作業在總成績中的比重並增加傳統紙筆閉卷考試的分數權重占比",
+                    "要求所有學生必須在提交作業時附上詳細聲明書證明未使用任何 AI 協助"
+                ],
+                optionsEn: [
+                    "Redesign assessment methods focusing on evaluating students' thinking process, AI usage methods, and final understanding depth",
+                    "Use stricter anti-cheating software monitoring systems to completely prohibit students from using AI tools in any situation",
+                    "Reduce assignment weight in overall grades and increase proportion of traditional pen-and-paper closed-book exams",
+                    "Require all students to submit detailed declarations with assignments proving no AI assistance was used"
+                ],
+                correct: [0],
+                explanation: "最適當的策略是重新設計評量,從「純粹的產出」轉向「思考過程、工具使用技巧和真正的理解」。這需要設計強調過程、個人觀點和批判性思考的作業,而不是純粹的資訊檢索任務。"
+            },
+            {
+                id: 25,
+                type: "multiple",
+                category: "Gemini 功能",
+                question: "Gemini in Docs 可以協助教師完成哪些文件相關任務?(選擇所有適用選項)",
+                questionEn: "What document-related tasks can Gemini in Docs assist teachers with? (Select all that apply)",
+                options: [
+                    "根據大綱或簡要指示快速生成完整的課程計畫或教學文件內容草稿",
+                    "改寫現有段落以調整語氣、簡化語言或改善文句流暢度和可讀性",
+                    "將文件內容直接翻譯成多種語言版本方便不同語言背景家長閱讀",
+                    "自動追蹤文件的所有修訂歷史並生成版本比較報告和變更摘要說明"
+                ],
+                optionsEn: [
+                    "Quickly generate complete lesson plan or instructional document content drafts based on outlines or brief instructions",
+                    "Rewrite existing paragraphs to adjust tone, simplify language or improve sentence flow and readability",
+                    "Directly translate document content into multiple language versions for parents from different language backgrounds",
+                    "Automatically track all document revision history and generate version comparison reports and change summaries"
+                ],
+                correct: [0, 1],
+                explanation: "Gemini in Docs 可以生成內容(A)和改寫段落(B)。選項 C:雖然可以協助翻譯,但這不是主要整合功能。選項 D:版本追蹤是 Google Docs 本身的功能,不是 Gemini 的功能。"
+            },
+            {
+                id: 26,
+                type: "single",
+                category: "提示詞工程",
+                question: "在提示詞中加入「步驟」(Steps)指引的主要好處是什麼?",
+                questionEn: "What is the main benefit of including 'Steps' guidance in prompts?",
+                options: [
+                    "引導 AI 進行結構化思考產生更有邏輯性和完整性的輸出內容結果",
+                    "增加提示詞的總字數長度讓 AI 認為這是重要任務而提高處理優先級",
+                    "讓提示詞看起來更專業正式符合學術寫作和商業溝通的格式標準",
+                    "強制 AI 必須按照特定順序處理資訊避免系統自行調整運算流程"
+                ],
+                optionsEn: [
+                    "Guide AI in structured thinking to produce more logical and complete output content results",
+                    "Increase total word count of prompt so AI considers it important task and raises processing priority",
+                    "Make prompt appear more professional and formal, meeting academic writing and business communication format standards",
+                    "Force AI to process information in specific order, preventing system from adjusting computational flow independently"
+                ],
+                correct: [0],
+                explanation: "明確的步驟指引幫助 AI 進行結構化思考,就像人類解決複雜問題一樣,產生更完整、有邏輯的輸出。這對複雜任務特別有效。"
+            },
+            {
+                id: 27,
+                type: "single",
+                category: "實作應用",
+                question: "教師想建立一個學期計畫包含每週主題、學習目標、評量方式和資源連結,最有效的方法是?",
+                questionEn: "What's the most effective method for teachers to create a semester plan including weekly topics, learning objectives, assessment methods, and resource links?",
+                options: [
+                    "建立詳細的 Gem 包含課程標準、評量哲學和時間結構然後生成完整計畫",
+                    "在 Google Sheets 中建立空白表格然後逐週手動填入所有細節和資源連結",
+                    "使用 NotebookLM 上傳去年的學期計畫讓系統自動更新為今年的版本內容",
+                    "每週使用 Gemini App 即時生成該週計畫避免提前規劃保持教學彈性"
+                ],
+                optionsEn: [
+                    "Create detailed Gem including course standards, assessment philosophy and time structure then generate complete plan",
+                    "Create blank table in Google Sheets then manually fill in all details and resource links week by week",
+                    "Use NotebookLM to upload last year's semester plan for system to automatically update to this year's version",
+                    "Use Gemini App weekly to generate that week's plan in real-time, avoiding advance planning to maintain teaching flexibility"
+                ],
+                correct: [0],
+                explanation: "建立包含課程標準、評量方法、時間分配等參數的 Gem 最有效。可以快速生成對齊目標且結構一致的學期計畫,並根據需要調整。這比手動填寫或臨時生成更有系統性。"
+            },
+            {
+                id: 28,
+                type: "truefalse",
+                category: "Gemini 功能",
+                question: "Canvas 功能主要用於在 Gemini 中建立和編輯文件,可以協作製作教學資源如詞彙表和課程大綱。",
+                questionEn: "The Canvas feature is primarily used to create and edit documents in Gemini, enabling collaborative production of teaching resources like glossaries and course outlines.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [0],
+                explanation: "正確。Canvas 是 Gemini 中用於建立和編輯文件的工作空間,特別適合協作建立各種教學資源。"
+            },
+            {
+                id: 29,
+                type: "truefalse",
+                category: "理解生成式 AI",
+                question: "Token 是 AI 模型處理文字的基本單位,可以是一個完整單字、單字的一部分或標點符號。",
+                questionEn: "A token is the basic unit for AI models to process text, which can be a complete word, part of a word, or punctuation.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [0],
+                explanation: "正確。Token 是 AI 處理語言的基本單位。理解 token 概念有助於優化提示詞長度和理解模型的輸入輸出限制。"
+            },
+            {
+                id: 30,
+                type: "truefalse",
+                category: "負責任使用 AI",
+                question: "學生過度依賴 AI 工具不會對其批判性思考和問題解決能力造成負面影響。",
+                questionEn: "Students' over-reliance on AI tools will not negatively impact their critical thinking and problem-solving abilities.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [1],
+                explanation: "錯誤。過度依賴 AI 確實可能削弱學生的獨立思考、問題解決和批判性分析能力。教師應引導適度使用,強調 AI 是輔助工具而非替代思考。"
+            },
+            {
+                id: 31,
+                type: "single",
+                category: "Gemini 功能",
+                question: "Gemini in Forms 的主要功能是什麼?",
+                questionEn: "What is the primary function of Gemini in Forms?",
+                options: [
+                    "根據文件或簡報內容自動生成與學習目標對齊的測驗題目和評量問題",
+                    "自動批改學生提交的開放式問答題並提供個人化回饋意見和改進建議",
+                    "分析表單收集的數據並生成視覺化圖表報告展示統計趨勢和模式分析",
+                    "將紙本測驗卷自動數位化並上傳到雲端表單系統方便線上施測管理"
+                ],
+                optionsEn: [
+                    "Automatically generate quiz questions and assessment items aligned with learning objectives based on document or presentation content",
+                    "Automatically grade students' open-ended responses and provide personalized feedback and improvement suggestions",
+                    "Analyze data collected from forms and generate visualization chart reports showing statistical trends and pattern analysis",
+                    "Automatically digitize paper test papers and upload to cloud form systems for convenient online testing management"
+                ],
+                correct: [0],
+                explanation: "Gemini in Forms 主要功能是基於 Google Docs 或 Slides 的內容自動生成與學習目標對齊的測驗題目,大幅節省教師出題時間。"
+            },
+            {
+                id: 32,
+                type: "single",
+                category: "提示詞工程",
+                question: "在 PARTS 框架中,為什麼明確指定 AI 的「角色」(Role)很重要?",
+                questionEn: "In the PARTS framework, why is explicitly specifying the AI's 'Role' important?",
+                options: [
+                    "幫助 AI 調整回應的專業程度、術語使用和教學方法以符合特定情境需求",
+                    "讓 AI 知道應該使用哪種程式語言或技術框架來處理使用者的請求任務",
+                    "使提示詞符合學術寫作規範並提高在專業期刊發表時的接受可能性",
+                    "強制 AI 必須使用特定的語氣和措辭風格避免產生不符合預期的回應"
+                ],
+                optionsEn: [
+                    "Help AI adjust response expertise level, terminology usage and teaching methods to fit specific context needs",
+                    "Let AI know which programming language or technical framework to use for processing user request tasks",
+                    "Make prompt conform to academic writing standards and increase acceptance probability when publishing in professional journals",
+                    "Force AI to use specific tone and wording style to avoid generating responses that don't meet expectations"
+                ],
+                correct: [0],
+                explanation: "指定角色(如「你是一位5年級科學教師」)幫助 AI 調整回應的專業程度、術語使用和教學方法,使輸出更符合特定情境的需求。"
+            },
+            {
+                id: 33,
+                type: "multiple",
+                category: "實作應用",
+                question: "教師使用 Gemini 建立差異化教學材料時,應該在提示詞中包含哪些關鍵資訊?(選擇所有適用選項)",
+                questionEn: "When teachers use Gemini to create differentiated instructional materials, what key information should be included in prompts? (Select all that apply)",
+                options: [
+                    "學生的年級層級、先備知識程度和特殊學習需求如 IEP 或 ESL 支持",
+                    "具體的學習目標、課程標準以及希望學生達成的能力表現指標要求",
+                    "教材的預期長度、格式要求和任何必須包含的特定範例或活動類型",
+                    "教師個人的教學風格偏好、過去使用過的教科書版本和出版商資訊"
+                ],
+                optionsEn: [
+                    "Student grade level, prior knowledge level and special learning needs such as IEP or ESL support",
+                    "Specific learning objectives, curriculum standards and desired student achievement performance indicators",
+                    "Expected material length, format requirements and any specific examples or activity types that must be included",
+                    "Teacher's personal teaching style preferences, previously used textbook editions and publisher information"
+                ],
+                correct: [0, 1, 2],
+                explanation: "應該包含:學生特徵和需求(A)、學習目標和標準(B)、格式和長度要求(C)。選項 D(個人偏好和教科書資訊)通常不是差異化教材的核心考量。"
+            },
+            {
+                id: 34,
+                type: "single",
+                category: "工具選擇",
+                question: "當教師想要為學生提供一個可以自主探索概念、提問和接受引導式學習的 AI 互動體驗時,應該推薦哪個功能?",
+                questionEn: "When teachers want to provide students with an AI interactive experience for autonomous concept exploration, questioning and guided learning, which feature should be recommended?",
+                options: [
+                    "Guided Learning 透過蘇格拉底式對話幫助學生主動探索和深入理解概念",
+                    "Canvas 提供文件編輯空間讓學生可以直接撰寫和修改學習筆記內容",
+                    "Gems 讓學生建立個人化的學習助手以便重複練習特定類型的問題",
+                    "Deep Research 協助學生快速收集大量資料並整合成完整的研究報告"
+                ],
+                optionsEn: [
+                    "Guided Learning helps students actively explore and deeply understand concepts through Socratic dialogue",
+                    "Canvas provides document editing space for students to directly write and modify learning note content",
+                    "Gems allows students to create personalized learning assistants for repeated practice of specific problem types",
+                    "Deep Research helps students quickly gather large amounts of data and integrate into complete research reports"
+                ],
+                correct: [0],
+                explanation: "Guided Learning 最適合此目的。它透過對話式引導(蘇格拉底教學法)幫助學生主動探索和深入理解知識,而不是直接給答案,這正是自主學習和批判性思考的核心。"
+            },
+            {
+                id: 35,
+                type: "truefalse",
+                category: "Gemini 功能",
+                question: "Deep Research 功能只能處理單一網頁來源,無法整合多個不同來源的資訊。",
+                questionEn: "The Deep Research feature can only process single web sources and cannot integrate information from multiple different sources.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [1],
+                explanation: "錯誤。Deep Research 的核心優勢就是能夠系統性地爬取多個網路來源,整合資訊並產出結構化的綜合研究報告,這正是其與一般搜尋的主要差異。"
+            },
+            
+            // ===== 新增題目 36-52 =====
+            
+            // 單選題 (36-40)
+            {
+                id: 36,
+                type: "single",
+                category: "理解生成式 AI",
+                question: "AI 模型中的「參數」(Parameters)是什麼?",
+                questionEn: "What are 'Parameters' in AI models?",
+                options: [
+                    "模型在訓練過程中學習到的權重值決定模型如何處理和回應輸入資訊",
+                    "使用者在提示詞中設定的具體要求和限制條件用於控制輸出格式",
+                    "系統管理員配置的硬體資源分配設定包括記憶體和處理器使用量",
+                    "開發團隊預先定義的倫理準則和安全規範確保 AI 回應符合道德"
+                ],
+                optionsEn: [
+                    "Weight values learned during training that determine how the model processes and responds to input information",
+                    "Specific requirements and constraints set by users in prompts to control output format",
+                    "Hardware resource allocation settings configured by system administrators including memory and processor usage",
+                    "Ethical guidelines and safety norms predefined by development team to ensure AI responses meet moral standards"
+                ],
+                correct: [0],
+                explanation: "參數是模型在訓練過程中學習到的權重值,決定了模型的行為和能力。參數數量(如 1750億參數)通常用來衡量模型的大小和複雜度。"
+            },
+            {
+                id: 37,
+                type: "single",
+                category: "Gemini 功能",
+                question: "什麼情況下最適合使用 Gemini 的 Canvas 功能?",
+                questionEn: "When is it most appropriate to use Gemini's Canvas feature?",
+                options: [
+                    "需要建立和協作編輯結構化文件如課程大綱、詞彙表或教學設計時",
+                    "想要快速搜尋網路上的最新資訊並整合多個來源產出研究報告時",
+                    "需要為不同班級重複生成類似格式的教材並自動套用固定範本時",
+                    "希望透過對話式互動引導學生逐步探索複雜概念培養批判思考時"
+                ],
+                optionsEn: [
+                    "Need to create and collaboratively edit structured documents like course outlines, glossaries or instructional designs",
+                    "Want to quickly search latest web information and integrate multiple sources to produce research reports",
+                    "Need to repeatedly generate materials in similar format for different classes and automatically apply fixed templates",
+                    "Hope to guide students step-by-step exploring complex concepts through conversational interaction to foster critical thinking"
+                ],
+                correct: [0],
+                explanation: "Canvas 是文件協作空間,最適合建立和編輯結構化文件如課程大綱、詞彙表等教學資源。選項 B 適合 Deep Research,C 適合 Gems,D 適合 Guided Learning。"
+            },
+            {
+                id: 38,
+                type: "single",
+                category: "負責任使用 AI",
+                question: "教師發現 AI 生成的教材中包含過時或不準確的歷史資訊時,最佳的處理方式是?",
+                questionEn: "What's the best approach when teachers find outdated or inaccurate historical information in AI-generated materials?",
+                options: [
+                    "將此作為媒體素養教學的機會教導學生如何驗證歷史資訊並使用多個來源交叉核對",
+                    "立即停止使用 AI 工具並向所有學生家長發送通知說明 AI 的不可靠性和風險",
+                    "直接修改錯誤內容但不告知學生內容來自 AI 以維持教師的專業權威形象",
+                    "繼續使用該教材因為輕微的歷史錯誤不會影響學生對整體概念的基本理解"
+                ],
+                optionsEn: [
+                    "Use this as media literacy teaching opportunity to show students how to verify historical information and cross-check with multiple sources",
+                    "Immediately stop using AI tools and send notifications to all parents explaining AI's unreliability and risks",
+                    "Directly correct errors without informing students content came from AI to maintain teacher's professional authority",
+                    "Continue using the material as minor historical errors won't affect students' basic understanding of overall concepts"
+                ],
+                correct: [0],
+                explanation: "最佳做法是將錯誤轉化為教學機會,教導學生如何驗證資訊、進行事實查核和使用多個來源交叉核對,這些是 AI 時代的關鍵技能。"
+            },
+            {
+                id: 39,
+                type: "single",
+                category: "工具選擇",
+                question: "教師想在課堂簡報中快速插入與主題相關的圖片說明和解說文字,最合適的工具是?",
+                questionEn: "What's the most suitable tool for teachers to quickly insert topic-related image descriptions and explanatory text in classroom presentations?",
+                options: [
+                    "Gemini in Slides 可以在簡報編輯過程中直接生成與當前內容相關的文字和建議",
+                    "NotebookLM 上傳簡報檔案後自動分析每一頁內容並生成對應的詳細解說",
+                    "Gemini App 單獨生成說明文字後再手動複製貼上到 Slides 的相應位置",
+                    "Deep Research 搜尋相關主題的學術論文並摘錄適合的段落用於簡報說明"
+                ],
+                optionsEn: [
+                    "Gemini in Slides can directly generate text and suggestions related to current content during presentation editing",
+                    "NotebookLM uploads presentation files to automatically analyze each page and generate corresponding detailed explanations",
+                    "Gemini App generates explanatory text separately then manually copy-paste to corresponding positions in Slides",
+                    "Deep Research searches academic papers on related topics and excerpts suitable paragraphs for presentation explanations"
+                ],
+                correct: [0],
+                explanation: "Gemini in Slides 最合適,因為它整合在簡報編輯環境中,可以即時根據當前內容生成相關文字,無需切換工具。"
+            },
+            {
+                id: 40,
+                type: "single",
+                category: "實作應用",
+                question: "教師想為一個專題研究課程建立評分標準(Rubric),包含多個評量維度和詳細的表現描述,最有效的方法是?",
+                questionEn: "What's the most effective method for teachers to create a rubric for project-based learning, including multiple assessment dimensions and detailed performance descriptions?",
+                options: [
+                    "在 Gemini 中提供專題目標和評量重點讓 AI 生成完整的多維度評分標準表格",
+                    "使用 NotebookLM 上傳其他教師的評分標準範例讓系統自動學習並生成新版本",
+                    "在 Google Sheets 手動建立表格框架然後逐一填寫每個評量維度的描述內容",
+                    "請 Gemini in Forms 根據專題內容自動生成評分問卷並轉換為標準化評分表"
+                ],
+                optionsEn: [
+                    "Provide project objectives and assessment priorities in Gemini to generate complete multi-dimensional rubric table",
+                    "Use NotebookLM to upload other teachers' rubric examples for system to automatically learn and generate new versions",
+                    "Manually create table framework in Google Sheets then fill in description content for each assessment dimension one by one",
+                    "Ask Gemini in Forms to automatically generate scoring questionnaire based on project content and convert to standardized rubric"
+                ],
+                correct: [0],
+                explanation: "直接在 Gemini 中提供專題目標、評量重點和期望的表現層級,讓 AI 生成完整的評分標準最有效率,之後可以根據需要微調。"
+            },
+            
+            // 多選題 (41-45)
+            {
+                id: 41,
+                type: "multiple",
+                category: "提示詞工程",
+                question: "在 PARTS 框架中,'S' 代表的 Steps(步驟)應該如何設計才最有效?(選擇所有適用選項)",
+                questionEn: "In the PARTS framework, how should 'S' for Steps be designed to be most effective? (Select all that apply)",
+                options: [
+                    "將複雜任務分解為清晰的序列步驟並說明每個步驟的目的和預期產出內容",
+                    "為每個步驟提供具體的範例或標準讓 AI 理解預期的輸出品質水準",
+                    "使用編號或項目符號清楚標示步驟順序確保 AI 按正確順序執行任務",
+                    "列出所有可能需要的步驟讓 AI 自行判斷哪些步驟適用於當前具體情境"
+                ],
+                optionsEn: [
+                    "Break complex tasks into clear sequential steps and explain purpose and expected output of each step",
+                    "Provide specific examples or standards for each step to help AI understand expected output quality level",
+                    "Use numbering or bullet points to clearly indicate step sequence ensuring AI executes tasks in correct order",
+                    "List all possible needed steps and let AI judge which steps apply to current specific context"
+                ],
+                correct: [0, 1, 2],
+                explanation: "有效的步驟設計包括:分解任務並說明目的(A)、提供範例和標準(B)、清楚標示順序(C)。選項 D 錯誤:應該提供明確適用的步驟,而非讓 AI 自行判斷。"
+            },
+            {
+                id: 42,
+                type: "multiple",
+                category: "理解生成式 AI",
+                question: "以下哪些因素會影響 AI 模型的回應品質?(選擇所有適用選項)",
+                questionEn: "Which factors affect the quality of AI model responses? (Select all that apply)",
+                options: [
+                    "上下文窗口大小決定模型能夠記憶和處理的最大文字量和對話長度",
+                    "訓練資料的品質、多樣性和時效性直接影響模型的知識範圍和準確度",
+                    "提示詞的清晰度、具體性和結構化程度會顯著影響輸出的相關性品質",
+                    "使用者所在的地理位置和時區設定會改變 AI 模型的運算邏輯和結果"
+                ],
+                optionsEn: [
+                    "Context window size determines maximum amount of text and conversation length model can remember and process",
+                    "Quality, diversity and timeliness of training data directly affect model's knowledge scope and accuracy",
+                    "Clarity, specificity and structure level of prompts significantly affect relevance and quality of output",
+                    "User's geographic location and timezone settings change AI model's computational logic and results"
+                ],
+                correct: [0, 1, 2],
+                explanation: "影響 AI 回應品質的因素包括:上下文窗口(A)、訓練資料品質(B)、提示詞品質(C)。選項 D 錯誤:地理位置和時區不影響模型運算邏輯。"
+            },
+            {
+                id: 43,
+                type: "multiple",
+                category: "工具選擇",
+                question: "以下哪些情境最適合使用 Gems 功能?(選擇所有適用選項)",
+                questionEn: "Which scenarios are most suitable for using the Gems feature? (Select all that apply)",
+                options: [
+                    "教師需要每週生成格式固定但內容變化的班級週報或家長通訊信件",
+                    "想要為不同科目建立標準化的教案範本並確保所有課程計畫結構一致",
+                    "需要針對特定學習需求(如 ESL、IEP)重複產生適配的差異化教材內容",
+                    "希望一次性研究複雜主題並產出包含多個網路來源的深度研究分析報告"
+                ],
+                optionsEn: [
+                    "Teachers need to generate weekly class newsletters or parent communications with fixed format but varying content",
+                    "Want to create standardized lesson plan templates for different subjects ensuring all lesson plans have consistent structure",
+                    "Need to repeatedly generate adapted differentiated materials for specific learning needs (like ESL, IEP)",
+                    "Hope to conduct one-time research on complex topics and produce in-depth analysis reports including multiple web sources"
+                ],
+                correct: [0, 1, 2],
+                explanation: "Gems 適合:週報生成(A)、標準化範本(B)、差異化教材(C)等重複性任務。選項 D 更適合用 Deep Research 而非 Gems。"
+            },
+            {
+                id: 44,
+                type: "multiple",
+                category: "負責任使用 AI",
+                question: "教師應該如何幫助學生建立健康的 AI 使用習慣?(選擇所有適用選項)",
+                questionEn: "How should teachers help students establish healthy AI usage habits? (Select all that apply)",
+                options: [
+                    "教導學生將 AI 視為學習輔助工具而不是答案提供機或作業代寫服務",
+                    "鼓勵學生在使用 AI 協助後反思自己的學習過程和對知識的真正理解",
+                    "建立清晰的課堂規範說明何時可以使用 AI、如何使用以及如何引用來源",
+                    "要求學生完全避免使用 AI 工具確保他們能夠獨立完成所有學習任務"
+                ],
+                optionsEn: [
+                    "Teach students to view AI as learning assistance tool rather than answer provider or homework ghostwriting service",
+                    "Encourage students to reflect on their learning process and genuine understanding of knowledge after using AI assistance",
+                    "Establish clear classroom norms explaining when AI can be used, how to use it and how to cite sources",
+                    "Require students to completely avoid using AI tools to ensure they can independently complete all learning tasks"
+                ],
+                correct: [0, 1, 2],
+                explanation: "健康的 AI 使用習慣包括:將 AI 視為輔助工具(A)、反思學習過程(B)、建立使用規範(C)。選項 D 錯誤:完全禁止不是解決方案。"
+            },
+            {
+                id: 45,
+                type: "multiple",
+                category: "Gemini 功能",
+                question: "NotebookLM 的哪些功能可以幫助教師進行教材研究和準備?(選擇所有適用選項)",
+                questionEn: "Which NotebookLM features can help teachers with material research and preparation? (Select all that apply)",
+                options: [
+                    "Audio Overview 功能可將文件內容轉換為播客式音訊方便教師通勤時收聽",
+                    "來源接地機制確保 AI 回應嚴格基於上傳文件降低幻覺和錯誤資訊風險",
+                    "跨文件分析能力可以識別多個來源之間的主題連結和觀點差異對比",
+                    "自動生成課程評量題目並根據布魯姆分類法標註不同認知層次程度"
+                ],
+                optionsEn: [
+                    "Audio Overview feature converts document content into podcast-style audio for teachers to listen during commute",
+                    "Source grounding mechanism ensures AI responses strictly based on uploaded documents reducing hallucination risks",
+                    "Cross-document analysis capability identifies thematic connections and viewpoint differences among multiple sources",
+                    "Automatically generates course assessment questions and labels different cognitive levels based on Bloom's taxonomy"
+                ],
+                correct: [0, 1, 2],
+                explanation: "NotebookLM 的功能包括:Audio Overview(A)、來源接地(B)、跨文件分析(C)。選項 D 錯誤:自動生成評量題目是 Gemini in Forms 的功能。"
+            },
+            
+            // 是非題 (46-52)
+            {
+                id: 46,
+                type: "truefalse",
+                category: "提示詞工程",
+                question: "使用「Zero-shot」提示時,不需要提供任何範例,AI 就能根據指令直接執行任務。",
+                questionEn: "When using 'Zero-shot' prompting, no examples are needed and AI can execute tasks directly based on instructions.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [0],
+                explanation: "正確。Zero-shot 是指不提供範例,僅依靠指令讓 AI 執行任務。相對的,Few-shot 是提供少量範例,Many-shot 是提供大量範例。"
+            },
+            {
+                id: 47,
+                type: "truefalse",
+                category: "Gemini 功能",
+                question: "教師可以使用 Gemini in Gmail 根據收到的郵件自動生成回覆草稿,節省回覆家長和同事的時間。",
+                questionEn: "Teachers can use Gemini in Gmail to automatically generate reply drafts based on received emails, saving time in responding to parents and colleagues.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [0],
+                explanation: "正確。Gemini in Gmail 可以根據收到的郵件內容和上下文自動生成回覆建議,教師可以在此基礎上修改,大幅提升溝通效率。"
+            },
+            {
+                id: 48,
+                type: "truefalse",
+                category: "負責任使用 AI",
+                question: "由於 AI 工具能夠快速生成內容,學生使用 AI 完成作業時不需要註明使用了 AI 協助。",
+                questionEn: "Since AI tools can quickly generate content, students don't need to indicate when they used AI assistance to complete assignments.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [1],
+                explanation: "錯誤。學術誠信要求學生明確註明何時使用了 AI 協助。教師應該建立清晰的 AI 使用政策,包括如何適當引用和聲明 AI 的使用。"
+            },
+            {
+                id: 49,
+                type: "truefalse",
+                category: "理解生成式 AI",
+                question: "生成式 AI 模型的知識截止日期(Knowledge Cutoff)是指模型訓練資料的最後更新時間。",
+                questionEn: "A generative AI model's knowledge cutoff date refers to the last update time of the model's training data.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [0],
+                explanation: "正確。知識截止日期表示訓練資料的最後時間點,模型對此日期之後發生的事件沒有直接知識,可能產生過時或不準確的回應。"
+            },
+            {
+                id: 50,
+                type: "truefalse",
+                category: "Gemini 功能",
+                question: "Gemini in Docs 的「幫我寫」功能可以完全取代教師的教案撰寫工作,無需任何人工審查或修改。",
+                questionEn: "Gemini in Docs' 'Help me write' feature can completely replace teachers' lesson planning work without any human review or modification.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [1],
+                explanation: "錯誤。AI 生成的內容應該被視為起點或草稿,教師必須審查、驗證準確性、檢查偏見、並根據具體教學情境調整內容。"
+            },
+            {
+                id: 51,
+                type: "truefalse",
+                category: "實作應用",
+                question: "使用 Gemini 建立差異化教材時,教師應該在同一個提示詞中同時要求生成所有不同程度版本以確保一致性。",
+                questionEn: "When creating differentiated materials with Gemini, teachers should request all different level versions in the same prompt to ensure consistency.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [1],
+                explanation: "錯誤。更好的做法是為每個學習程度建立獨立的 Gem 或提示詞,確保每個版本都能獲得充分的關注和適當的差異化策略。"
+            },
+            {
+                id: 52,
+                type: "truefalse",
+                category: "負責任使用 AI",
+                question: "Google Workspace for Education 承諾不會將學生資料用於訓練 AI 模型或用於廣告目的。",
+                questionEn: "Google Workspace for Education commits not to use student data for training AI models or advertising purposes.",
+                options: ["正確 (True)", "錯誤 (False)"],
+                optionsEn: ["True", "False"],
+                correct: [0],
+                explanation: "正確。Google 明確承諾保護使用 Workspace for Education 帳戶的學生隱私,不會將資料用於 AI 訓練、廣告或建立個人檔案。"
+            }
+        ];
+        
+        const knowledgeAreas = [
+            {
+                title: "🎯 領域一:理解生成式 AI",
+                points: [
+                    "生成式 AI 基本概念與運作原理",
+                    "AI 幻覺(Hallucinations)的定義與識別",
+                    "機器學習與訓練資料集",
+                    "Token 概念與處理機制",
+                    "AI 偏見的來源與影響",
+                    "生成式 AI vs 傳統搜尋引擎"
+                ]
+            },
+            {
+                title: "🛠️ 領域二:實施 Gemini",
+                points: [
+                    "PARTS 提示詞框架完整應用",
+                    "Gems:建立與管理自訂指令",
+                    "Canvas:文件協作空間",
+                    "Deep Research:深度研究功能",
+                    "Guided Learning:對話式學習引導",
+                    "Workspace 整合(Docs/Gmail/Slides/Forms)",
+                    "Few-shot Learning 技巧"
+                ]
+            },
+            {
+                title: "📚 NotebookLM 專精",
+                points: [
+                    "上傳多種來源格式(PDF/Docs/網頁)",
+                    "Audio Overview 生成與自訂",
+                    "來源接地(Source grounding)概念",
+                    "多文件綜合分析",
+                    "學習工具生成(Study Guide)",
+                    "跨文件主題連結"
+                ]
+            },
+            {
+                title: "✅ 負責任使用 AI",
+                points: [
+                    "識別並處理 AI 偏見",
+                    "教導學生資訊驗證",
+                    "處理抄襲與學術誠信",
+                    "培養批判性思考能力",
+                    "避免過度依賴 AI",
+                    "將錯誤轉化為教學機會",
+                    "隱私保護與資料安全"
+                ]
+            },
+            {
+                title: "🎓 教學實踐策略",
+                points: [
+                    "差異化教學應用",
+                    "評量方式的轉變",
+                    "重複性任務自動化",
+                    "學習風格適配",
+                    "建立 AI 使用規範",
+                    "設計過程導向作業"
+                ]
+            }
+        ];
+        
+        function App() {
+            const [currentTab, setCurrentTab] = useState('practice');
+            const [language, setLanguage] = useState('both');
+            const [numQuestions, setNumQuestions] = useState(37);
+            const [selectedQuestions, setSelectedQuestions] = useState([]);
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [selectedAnswers, setSelectedAnswers] = useState([]);
+            const [showExplanation, setShowExplanation] = useState(false);
+            const [score, setScore] = useState(0);
+            const [answeredQuestions, setAnsweredQuestions] = useState({});
+            const [wrongAnswers, setWrongAnswers] = useState([]);
+            const [isComplete, setIsComplete] = useState(false);
+            
+            useEffect(() => {
+                startNewPractice();
+            }, []);
+            
+            const startNewPractice = () => {
+                const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
+                const selected = shuffled.slice(0, numQuestions);
+                setSelectedQuestions(selected);
+                setCurrentQuestion(0);
+                setSelectedAnswers([]);
+                setShowExplanation(false);
+                setScore(0);
+                setAnsweredQuestions({});
+                setWrongAnswers([]);
+                setIsComplete(false);
+            };
+            
+            const progress = (Object.keys(answeredQuestions).length / selectedQuestions.length) * 100;
+            const currentQ = selectedQuestions[currentQuestion];
+            
+            const handleAnswer = (index) => {
+                if (showExplanation || !currentQ) return;
+                
+                if (currentQ.type === 'multiple') {
+                    // 多選題:切換選擇狀態
+                    if (selectedAnswers.includes(index)) {
+                        setSelectedAnswers(selectedAnswers.filter(i => i !== index));
+                    } else {
+                        setSelectedAnswers([...selectedAnswers, index]);
+                    }
+                } else {
+                    // 單選題和是非題
+                    setSelectedAnswers([index]);
+                }
+            };
+            
+            const checkAnswer = () => {
+                if (selectedAnswers.length === 0 || !currentQ) return;
+                
+                setShowExplanation(true);
+                
+                let isCorrect = false;
+                if (currentQ.type === 'multiple') {
+                    // 多選題:必須完全正確
+                    const sortedSelected = [...selectedAnswers].sort();
+                    const sortedCorrect = [...currentQ.correct].sort();
+                    isCorrect = sortedSelected.length === sortedCorrect.length && 
+                               sortedSelected.every((val, i) => val === sortedCorrect[i]);
+                } else {
+                    // 單選題和是非題
+                    isCorrect = selectedAnswers[0] === currentQ.correct[0];
+                }
+                
+                if (!answeredQuestions[currentQ.id]) {
+                    setAnsweredQuestions({
+                        ...answeredQuestions,
+                        [currentQ.id]: {
+                            correct: isCorrect,
+                            userAnswers: selectedAnswers,
+                            correctAnswers: currentQ.correct
+                        }
+                    });
+                    
+                    if (isCorrect) {
+                        setScore(score + 1);
+                    } else {
+                        setWrongAnswers([...wrongAnswers, {
+                            ...currentQ,
+                            userAnswers: selectedAnswers
+                        }]);
+                    }
+                }
+            };
+            
+            const nextQuestion = () => {
+                if (currentQuestion < selectedQuestions.length - 1) {
+                    setCurrentQuestion(currentQuestion + 1);
+                    setSelectedAnswers([]);
+                    setShowExplanation(false);
+                } else {
+                    setIsComplete(true);
+                }
+            };
+            
+            const previousQuestion = () => {
+                if (currentQuestion > 0) {
+                    setCurrentQuestion(currentQuestion - 1);
+                    setSelectedAnswers([]);
+                    setShowExplanation(false);
+                }
+            };
+            
+            const getOptionClassName = (index) => {
+                if (!showExplanation) {
+                    return selectedAnswers.includes(index) ? 'option selected' : 'option';
+                }
+                
+                const isCorrect = currentQ.correct.includes(index);
+                const isSelected = selectedAnswers.includes(index);
+                
+                if (isCorrect) return 'option correct';
+                if (isSelected && !isCorrect) return 'option incorrect';
+                return 'option';
+            };
+            
+            const getExplanationClass = () => {
+                if (!currentQ) return 'explanation';
+                
+                if (currentQ.type === 'multiple') {
+                    const sortedSelected = [...selectedAnswers].sort();
+                    const sortedCorrect = [...currentQ.correct].sort();
+                    const isFullyCorrect = sortedSelected.length === sortedCorrect.length && 
+                                          sortedSelected.every((val, i) => val === sortedCorrect[i]);
+                    return isFullyCorrect ? 'explanation' : 'explanation wrong';
+                } else {
+                    return selectedAnswers[0] === currentQ.correct[0] ? 'explanation' : 'explanation wrong';
+                }
+            };
+            
+            const passScore = Math.ceil(selectedQuestions.length * 0.8);
+            const passed = score >= passScore;
+            
+            if (selectedQuestions.length === 0) {
+                return <div>載入中...</div>;
+            }
+            
+            return (
+                <div className="app-container">
+                    <div className="header">
+                        <h1>🎓 Gemini Certification for Educators - 完整版</h1>
+                        <p>單選題 | 多選題 | 是非題 | 中英對照 | 隨機題庫</p>
+                    </div>
+                    
+                    <div className="stats">
+                        <div className="stat-item">
+                            <div className="stat-value">{Object.keys(answeredQuestions).length}/{selectedQuestions.length}</div>
+                            <div className="stat-label">已完成題目</div>
+                        </div>
+                        <div className="stat-item">
+                            <div className="stat-value">{score}</div>
+                            <div className="stat-label">正確答案</div>
+                        </div>
+                        <div className="stat-item">
+                            <div className="stat-value">
+                                {Object.keys(answeredQuestions).length > 0 
+                                    ? Math.round((score / Object.keys(answeredQuestions).length) * 100)
+                                    : 0}%
+                            </div>
+                            <div className="stat-label">正確率</div>
+                        </div>
+                    </div>
+                    
+                    <div className="progress-bar">
+                        <div className="progress-fill" style={{width: `${progress}%`}}></div>
+                    </div>
+                    
+                    <div className="tabs">
+                        <button 
+                            className={`tab ${currentTab === 'info' ? 'active' : ''}`}
+                            onClick={() => setCurrentTab('info')}
+                        >
+                            📚 考試資訊
+                        </button>
+                        <button 
+                            className={`tab ${currentTab === 'knowledge' ? 'active' : ''}`}
+                            onClick={() => setCurrentTab('knowledge')}
+                        >
+                            💡 知識重點
+                        </button>
+                        <button 
+                            className={`tab ${currentTab === 'practice' ? 'active' : ''}`}
+                            onClick={() => setCurrentTab('practice')}
+                        >
+                            ✏️ 模擬練習
+                        </button>
+                    </div>
+                    
+                    <div className="content">
+                        {currentTab === 'info' && (
+                            <div>
+                                <div className="exam-info">
+                                    <h3>📋 Gemini Certified Educator 考試概覽</h3>
+                                    <p style={{marginBottom: '15px', lineHeight: '1.6'}}>
+                                        這是 Google 官方推出的免費認證,驗證教育工作者對生成式 AI 的理解,
+                                        以及在教育情境中有效整合 Gemini 和其他 AI 工具的能力。
+                                    </p>
+                                    <div className="info-grid">
+                                        <div className="info-item">
+                                            <span className="info-icon">📝</span>
+                                            <div>
+                                                <strong>題型</strong><br/>
+                                                單選、多選、是非 共37題
+                                            </div>
+                                        </div>
+                                        <div className="info-item">
+                                            <span className="info-icon">⏱️</span>
+                                            <div>
+                                                <strong>時間</strong><br/>
+                                                無限制(14天內完成)
+                                            </div>
+                                        </div>
+                                        <div className="info-item">
+                                            <span className="info-icon">🎯</span>
+                                            <div>
+                                                <strong>通過標準</strong><br/>
+                                                80% (30/37題)
+                                            </div>
+                                        </div>
+                                        <div className="info-item">
+                                            <span className="info-icon">💰</span>
+                                            <div>
+                                                <strong>費用</strong><br/>
+                                                完全免費
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        
+                        {currentTab === 'knowledge' && (
+                            <div className="knowledge-cards">
+                                {knowledgeAreas.map((area, index) => (
+                                    <div key={index} className="knowledge-card">
+                                        <h3>{area.title}</h3>
+                                        <ul>
+                                            {area.points.map((point, pIndex) => (
+                                                <li key={pIndex}>{point}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        
+                        {currentTab === 'practice' && !isComplete && currentQ && (
+                            <div>
+                                <div className="settings-panel">
+                                    <h4>⚙️ 練習設定</h4>
+                                    <div className="setting-item">
+                                        <span>題目數量 (總題庫: {allQuestions.length} 題)</span>
+                                        <input 
+                                            type="number" 
+                                            min="10" 
+                                            max={allQuestions.length}
+                                            value={numQuestions}
+                                            onChange={(e) => setNumQuestions(parseInt(e.target.value))}
+                                            disabled={Object.keys(answeredQuestions).length > 0}
+                                        />
+                                    </div>
+                                    <button 
+                                        className="btn btn-warning"
+                                        onClick={startNewPractice}
+                                        style={{width: '100%', marginTop: '10px'}}
+                                    >
+                                        🔄 重新開始新的練習(隨機抽題)
+                                    </button>
+                                </div>
+                                
+                                <div className="language-toggle">
+                                    <button 
+                                        className={`lang-btn ${language === 'zh' ? 'active' : ''}`}
+                                        onClick={() => setLanguage('zh')}
+                                    >
+                                        中文
+                                    </button>
+                                    <button 
+                                        className={`lang-btn ${language === 'both' ? 'active' : ''}`}
+                                        onClick={() => setLanguage('both')}
+                                    >
+                                        中英對照
+                                    </button>
+                                    <button 
+                                        className={`lang-btn ${language === 'en' ? 'active' : ''}`}
+                                        onClick={() => setLanguage('en')}
+                                    >
+                                        English
+                                    </button>
+                                </div>
+                                
+                                <div className="question-card">
+                                    <div className="question-header">
+                                        <span className="question-number">題目 {currentQuestion + 1}/{selectedQuestions.length}</span>
+                                        <span className="question-type-badge">
+                                            {currentQ.type === 'truefalse' ? '是非題' : 
+                                             currentQ.type === 'multiple' ? '多選題' : '單選題'}
+                                        </span>
+                                        <span className="category-badge">{currentQ.category}</span>
+                                    </div>
+                                    
+                                    {currentQ.type === 'multiple' && (
+                                        <div className="multi-select-hint">
+                                            ⚠️ 多選題:請選擇所有正確的選項
+                                        </div>
+                                    )}
+                                    
+                                    <div className="question-text">
+                                        {(language === 'zh' || language === 'both') && currentQ.question}
+                                        {language === 'both' && currentQ.questionEn && (
+                                            <div className="question-english">{currentQ.questionEn}</div>
+                                        )}
+                                        {language === 'en' && currentQ.questionEn}
+                                    </div>
+                                    
+                                    <div className="options">
+                                        {currentQ.options.map((option, index) => (
+                                            <div 
+                                                key={index} 
+                                                className={getOptionClassName(index)}
+                                                onClick={() => handleAnswer(index)}
+                                            >
+                                                <span className="option-label">{String.fromCharCode(65 + index)}</span>
+                                                <div className="option-content">
+                                                    <span className="option-text">
+                                                        {(language === 'zh' || language === 'both') && option}
+                                                        {language === 'en' && currentQ.optionsEn[index]}
+                                                    </span>
+                                                    {language === 'both' && currentQ.optionsEn && (
+                                                        <span className="option-english">{currentQ.optionsEn[index]}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    
+                                    {showExplanation && (
+                                        <div className={getExplanationClass()}>
+                                            <h4>
+                                                {currentQ.type === 'multiple' && selectedAnswers.length === currentQ.correct.length &&
+                                                 selectedAnswers.every(val => currentQ.correct.includes(val)) ? '✅ 完全正確!' :
+                                                 currentQ.type !== 'multiple' && selectedAnswers[0] === currentQ.correct[0] ? '✅ 回答正確!' :
+                                                 '❌ 回答錯誤'}
+                                            </h4>
+                                            <p><strong>正確答案:</strong> {currentQ.correct.map(i => String.fromCharCode(65 + i)).join(', ')}</p>
+                                            <p><strong>解析:</strong> {currentQ.explanation}</p>
+                                        </div>
+                                    )}
+                                    
+                                    <div className="buttons">
+                                        <button 
+                                            className="btn btn-secondary"
+                                            onClick={previousQuestion}
+                                            disabled={currentQuestion === 0}
+                                        >
+                                            ⬅️ 上一題
+                                        </button>
+                                        
+                                        {!showExplanation ? (
+                                            <button 
+                                                className="btn btn-primary"
+                                                onClick={checkAnswer}
+                                                disabled={selectedAnswers.length === 0}
+                                            >
+                                                確認答案
+                                            </button>
+                                        ) : (
+                                            <button 
+                                                className="btn btn-success"
+                                                onClick={nextQuestion}
+                                            >
+                                                {currentQuestion < selectedQuestions.length - 1 ? '下一題 ➡️' : '查看結果 🎉'}
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        
+                        {currentTab === 'practice' && isComplete && (
+                            <div className="result-card">
+                                <h2>🎉 練習完成!</h2>
+                                <div className={`result-score ${passed ? 'pass' : 'fail'}`}>
+                                    {score}/{selectedQuestions.length}
+                                </div>
+                                <div className="result-message">
+                                    正確率: <strong>{Math.round((score / selectedQuestions.length) * 100)}%</strong>
+                                </div>
+                                <div className={`result-message ${passed ? 'pass' : 'fail'}`}>
+                                    {passed ? (
+                                        <>
+                                            <div style={{fontSize: '48px', marginBottom: '20px'}}>✅</div>
+                                            <h3>太棒了!你已達到通過標準!</h3>
+                                            <p>你答對了 {score} 題,超過 80% 的通過門檻({passScore} 題)</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div style={{fontSize: '48px', marginBottom: '20px'}}>📚</div>
+                                            <h3>繼續加油!</h3>
+                                            <p>你答對了 {score} 題,需要 {passScore} 題才能通過</p>
+                                            <p>檢視錯題列表並複習知識重點</p>
+                                        </>
+                                    )}
+                                </div>
+                                
+                                {wrongAnswers.length > 0 && (
+                                    <div className="wrong-answers">
+                                        <h3>
+                                            <span>❌</span>
+                                            錯題複習 ({wrongAnswers.length} 題)
+                                        </h3>
+                                        {wrongAnswers.map((q, index) => (
+                                            <div key={index} className="wrong-question-item">
+                                                <h4>【{q.category}】{q.question}</h4>
+                                                <p>
+                                                    <span className="your-answer">
+                                                        你的答案: {q.userAnswers.map(i => `${String.fromCharCode(65 + i)} - ${q.options[i]}`).join(', ')}
+                                                    </span>
+                                                </p>
+                                                <p>
+                                                    <span className="correct-answer">
+                                                        正確答案: {q.correct.map(i => `${String.fromCharCode(65 + i)} - ${q.options[i]}`).join(', ')}
+                                                    </span>
+                                                </p>
+                                                <p style={{marginTop: '10px', color: '#6c757d'}}>
+                                                    💡 {q.explanation}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                
+                                <div className="buttons" style={{marginTop: '30px'}}>
+                                    <button className="btn btn-primary" onClick={startNewPractice}>
+                                        🔄 開始新練習(不同題目)
+                                    </button>
+                                    <button className="btn btn-secondary" onClick={() => setCurrentTab('knowledge')}>
+                                        📚 複習知識
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+        
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
