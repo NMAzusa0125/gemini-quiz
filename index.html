@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content-width, initial-scale=1.0">
-    <title>Gemini Certification for Educators - 完整版練習</title>
+    <title>Gemini Certification for Educators - 練習題庫</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -587,9 +587,116 @@
     <div id="root"></div>
     
     <script type="text/babel">
+
+        // 閃卡內容組件
+        function FlashcardContent() {
+            const [currentCard, setCurrentCard] = React.useState(0);
+            const [isFlipped, setIsFlipped] = React.useState(false);
+            
+            const cards = [
+                { topic: "提示工程", q: "When crafting an effective prompt for Gemini, what does the 'T' stand for in the C.A.S.T. framework?", a: "The 'T' stands for Tone. The C.A.S.T. framework components are: Context, Action, Specifics, and Tone." },
+                { topic: "負責任 AI", q: "What are the two most critical ethical considerations when using generative AI in the classroom?", a: "Data privacy and security (protecting student information) and ensuring factual accuracy and verification." },
+                { topic: "Gemini 功能", q: "What term describes Gemini's ability to process multiple data types within a single prompt?", a: "Multimodality. This is a key feature distinguishing it from traditional language models." },
+                { topic: "教學規劃", q: "How can a teacher use Gemini to quickly prepare a 'tiered lesson plan'?", a: "Provide the topic, grade level, and differentiation levels, asking Gemini to create activities tailored to varying difficulty." },
+                { topic: "學生規範", q: "What policy should schools establish before allowing students to use generative AI tools?", a: "An Acceptable Use Policy (AUP) or AI Usage Guidelines defining academic integrity and permissible uses." }
+            ];
+            
+            return (
+                <div>
+                    <div style={{perspective: '1000px', height: '400px', margin: '30px auto', maxWidth: '700px'}}>
+                        <div style={{
+                            position: 'relative',
+                            width: '100%',
+                            height: '100%',
+                            transition: 'transform 0.6s',
+                            transformStyle: 'preserve-3d',
+                            transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                        }}>
+                            <div style={{
+                                position: 'absolute',
+                                width: '100%',
+                                height: '100%',
+                                backfaceVisibility: 'hidden',
+                                borderRadius: '20px',
+                                padding: '40px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                textAlign: 'center',
+                                boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                color: 'white'
+                            }}>
+                                <div style={{fontSize: '14px', fontWeight: 600, marginBottom: '20px', padding: '8px 20px', background: 'rgba(255,255,255,0.2)', borderRadius: '20px'}}>
+                                    {cards[currentCard].topic}
+                                </div>
+                                <div style={{fontSize: '20px', fontWeight: 600, lineHeight: 1.5}}>
+                                    {cards[currentCard].q}
+                                </div>
+                            </div>
+                            
+                            <div style={{
+                                position: 'absolute',
+                                width: '100%',
+                                height: '100%',
+                                backfaceVisibility: 'hidden',
+                                borderRadius: '20px',
+                                padding: '40px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                textAlign: 'center',
+                                boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+                                background: 'white',
+                                border: '3px solid #667eea',
+                                transform: 'rotateY(180deg)'
+                            }}>
+                                <div style={{fontSize: '14px', fontWeight: 600, color: '#667eea', marginBottom: '20px', padding: '8px 20px', background: '#f0f0f0', borderRadius: '20px'}}>
+                                    答案 Answer
+                                </div>
+                                <div style={{fontSize: '18px', lineHeight: 1.6, color: '#333'}}>
+                                    {cards[currentCard].a}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style={{textAlign: 'center', marginTop: '30px'}}>
+                        <button 
+                            className="btn btn-success"
+                            onClick={() => setIsFlipped(!isFlipped)}
+                            style={{marginRight: '10px'}}
+                        >
+                            {isFlipped ? '🔄 翻回問題' : '🔄 查看答案'}
+                        </button>
+                        <button 
+                            className="btn btn-secondary"
+                            onClick={() => { setCurrentCard((currentCard - 1 + cards.length) % cards.length); setIsFlipped(false); }}
+                            style={{marginRight: '10px'}}
+                        >
+                            ⬅️ 上一張
+                        </button>
+                        <button 
+                            className="btn btn-secondary"
+                            onClick={() => { setCurrentCard((currentCard + 1) % cards.length); setIsFlipped(false); }}
+                        >
+                            下一張 ➡️
+                        </button>
+                    </div>
+                    
+                    <div style={{textAlign: 'center', marginTop: '20px', fontSize: '18px', fontWeight: 600, color: '#667eea'}}>
+                        卡片 {currentCard + 1} / {cards.length}
+                    </div>
+                </div>
+            );
+        }
+
+
         const { useState, useEffect } = React;
         
-        // 完整題庫 - 包含單選、多選、是非題,所有選項長度相近且具迷惑性
+        // 練習題庫 - 包含單選、多選、是非題,所有選項長度相近且具迷惑性
         const allQuestions = [
             // ===== 是非題 =====
             {
@@ -1545,6 +1652,415 @@
                 optionsEn: ["True", "False"],
                 correct: [0],
                 explanation: "正確。Google 明確承諾保護使用 Workspace for Education 帳戶的學生隱私,不會將資料用於 AI 訓練、廣告或建立個人檔案。"
+            },
+
+            // ===== 從閃卡整合的新題目 =====
+            {
+                id: 101,
+                type: "single",
+                category: "提示工程 (Prompt Engineering)",
+                question: "【提示工程 (Prompt Engineering)】When crafting an effective prompt for Gemini, what does the 'T' stand for in the C.A.S.T. framework?",
+                questionEn: "When crafting an effective prompt for Gemini, what does the 'T' stand for in the C.A.S.T. framework?",
+                options: ["The 'T' stands for Tone. The C.A.S.T. framework components are: C (Context), A (Action), S (Specific...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["The 'T' stands for **Tone**. The C.A.S.T. framework components are: C (Context), A (Action), S (Specifics), and T (Tone).", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "The 'T' stands for Tone. The C.A.S.T. framework components are: C (Context), A (Action), S (Specifics), and T (Tone)."
+            },
+            {
+                id: 102,
+                type: "single",
+                category: "負責任的 AI (Responsible AI)",
+                question: "【負責任的 AI (Responsible AI)】What are the two most critical ethical considerations an educator should emphasize when using generative AI in the classroom?",
+                questionEn: "What are the two most critical ethical considerations an educator should emphasize when using generative AI in the classroom?",
+                options: ["Data privacy and security (protecting student information) and ensuring factual accuracy and verific...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["**Data privacy and security** (protecting student information) and **ensuring factual accuracy and verification** (to mitigate against hallucinations or biased content).", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Data privacy and security (protecting student information) and ensuring factual accuracy and verification (to mitigate against hallucinations or biased content)."
+            },
+            {
+                id: 103,
+                type: "single",
+                category: "Gemini 核心功能 (Core Features)",
+                question: "【Gemini 核心功能 (Core Features)】What term describes Gemini's ability to process multiple data types—such as text, images, and audio—within a single prompt?",
+                questionEn: "What term describes Gemini's ability to process multiple data types—such as text, images, and audio—within a single prompt?",
+                options: ["Multimodality. This is a key feature distinguishing it from traditional language models.", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["**Multimodality**. This is a key feature distinguishing it from traditional language models.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Multimodality. This is a key feature distinguishing it from traditional language models."
+            },
+            {
+                id: 104,
+                type: "single",
+                category: "教學規劃應用 (Lesson Planning)",
+                question: "【教學規劃應用 (Lesson Planning)】How can a teacher use Gemini to quickly prepare a 'tiered lesson plan' for the next week's unit?",
+                questionEn: "How can a teacher use Gemini to quickly prepare a 'tiered lesson plan' for the next week's unit?",
+                options: ["The teacher can provide the topic, student grade level, and required levels of differentiation, aski...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["The teacher can provide the topic, student grade level, and required levels of differentiation, asking Gemini to create a table or list of activities tailored to varying difficulty or learning styles.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "The teacher can provide the topic, student grade level, and required levels of differentiation, asking Gemini to create a table or list of activities tailored to varying difficulty or learning styles."
+            },
+            {
+                id: 105,
+                type: "single",
+                category: "學生使用規範 (Student Use Policy)",
+                question: "【學生使用規範 (Student Use Policy)】What policy does a school typically recommend establishing before allowing students to use generative AI tools to govern their appropriate use?",
+                questionEn: "What policy does a school typically recommend establishing before allowing students to use generative AI tools to govern their appropriate use?",
+                options: ["An Acceptable Use Policy (AUP) or specific AI Usage Guidelines, which define academic integrity and ...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["An **Acceptable Use Policy (AUP)** or specific AI Usage Guidelines, which define academic integrity and the permissible uses of the tool.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "An Acceptable Use Policy (AUP) or specific AI Usage Guidelines, which define academic integrity and the permissible uses of the tool."
+            },
+            {
+                id: 106,
+                type: "single",
+                category: "評估應用 (Assessment)",
+                question: "【評估應用 (Assessment)】What is one major concern if a teacher directly uses unmodified AI-generated test questions in a high-stakes exam?",
+                questionEn: "What is one major concern if a teacher directly uses unmodified AI-generated test questions in a high-stakes exam?",
+                options: ["Hallucinations or inaccuracies that may misrepresent key concepts. Additionally, AI-generated questi...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["**Hallucinations or inaccuracies** that may misrepresent key concepts. Additionally, AI-generated questions might not align perfectly with specific learning objectives or standards, requiring teacher review and validation.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Hallucinations or inaccuracies that may misrepresent key concepts. Additionally, AI-generated questions might not align perfectly with specific learning objectives or standards, requiring teacher review and validation."
+            },
+            {
+                id: 107,
+                type: "single",
+                category: "數據保護 (Data Protection)",
+                question: "【數據保護 (Data Protection)】What is the primary reason educators should avoid uploading sensitive student records (e.g., health info, grades) directly to generative AI tools?",
+                questionEn: "What is the primary reason educators should avoid uploading sensitive student records (e.g., health info, grades) directly to generative AI tools?",
+                options: ["Privacy and data security compliance (FERPA, GDPR). These regulations prohibit sharing personally id...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["**Privacy and data security compliance** (FERPA, GDPR). These regulations prohibit sharing personally identifiable or sensitive information without proper safeguards and consent.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Privacy and data security compliance (FERPA, GDPR). These regulations prohibit sharing personally identifiable or sensitive information without proper safeguards and consent."
+            },
+            {
+                id: 108,
+                type: "single",
+                category: "教學差異化 (Differentiation)",
+                question: "【教學差異化 (Differentiation)】How can a teacher use Gemini to provide **scaffolded reading materials** for students at different reading levels within the same class?",
+                questionEn: "How can a teacher use Gemini to provide **scaffolded reading materials** for students at different reading levels within the same class?",
+                options: ["The teacher can input the core text and ask Gemini to rewrite it at specified reading levels (e.g., ...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["The teacher can input the core text and ask Gemini to **rewrite it at specified reading levels** (e.g., Grade 4, Grade 7, Grade 10), adjusting vocabulary and sentence complexity while maintaining the core concepts.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "The teacher can input the core text and ask Gemini to rewrite it at specified reading levels (e.g., Grade 4, Grade 7, Grade 10), adjusting vocabulary and sentence complexity while maintaining the core concepts."
+            },
+            {
+                id: 109,
+                type: "single",
+                category: "AI 偏見 (AI Bias)",
+                question: "【AI 偏見 (AI Bias)】Why is it important for teachers to check AI-generated content for **cultural bias** or **stereotypes**?",
+                questionEn: "Why is it important for teachers to check AI-generated content for **cultural bias** or **stereotypes**?",
+                options: ["AI models are trained on vast datasets that can include societal biases. If left unchecked, the AI m...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["AI models are trained on vast datasets that can include societal biases. If left unchecked, the AI might produce materials that inadvertently reinforce **stereotypes** or exclude certain **cultural perspectives**, impacting equity in education.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "AI models are trained on vast datasets that can include societal biases. If left unchecked, the AI might produce materials that inadvertently reinforce stereotypes or exclude certain cultural perspectives, impacting equity in education."
+            },
+            {
+                id: 110,
+                type: "single",
+                category: "提示詞最佳實踐 (Prompt Best Practices)",
+                question: "【提示詞最佳實踐 (Prompt Best Practices)】What is the benefit of including **few-shot examples** in a prompt when asking Gemini to generate a specific type of content?",
+                questionEn: "What is the benefit of including **few-shot examples** in a prompt when asking Gemini to generate a specific type of content?",
+                options: ["Few-shot examples (2-3 sample inputs and outputs) help Gemini understand the desired format, style, ...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Few-shot examples (2-3 sample inputs and outputs) help Gemini understand the **desired format, style, and level of detail**, significantly improving output quality and consistency.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Few-shot examples (2-3 sample inputs and outputs) help Gemini understand the desired format, style, and level of detail, significantly improving output quality and consistency."
+            },
+            {
+                id: 111,
+                type: "single",
+                category: "學生參與 (Student Engagement)",
+                question: "【學生參與 (Student Engagement)】What is one effective strategy for using AI to **increase student engagement** in a writing assignment?",
+                questionEn: "What is one effective strategy for using AI to **increase student engagement** in a writing assignment?",
+                options: ["Allow students to use AI as a brainstorming partner or research assistant to generate ideas and outl...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Allow students to use AI as a **brainstorming partner** or **research assistant** to generate ideas and outlines, but require them to write, revise, and critically evaluate the final content themselves.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Allow students to use AI as a brainstorming partner or research assistant to generate ideas and outlines, but require them to write, revise, and critically evaluate the final content themselves."
+            },
+            {
+                id: 112,
+                type: "single",
+                category: "回饋生成 (Feedback Generation)",
+                question: "【回饋生成 (Feedback Generation)】How can teachers use Gemini to provide **formative feedback** on student drafts efficiently?",
+                questionEn: "How can teachers use Gemini to provide **formative feedback** on student drafts efficiently?",
+                options: ["Teachers can input student writing and ask Gemini to identify strengths, areas for improvement, and ...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Teachers can input student writing and ask Gemini to identify **strengths, areas for improvement, and specific suggestions** (e.g., thesis clarity, evidence use, grammar). The teacher then reviews and personalizes this feedback before sharing it with students.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Teachers can input student writing and ask Gemini to identify strengths, areas for improvement, and specific suggestions (e.g., thesis clarity, evidence use, grammar). The teacher then reviews and personalizes this feedback before sharing it with students."
+            },
+            {
+                id: 113,
+                type: "single",
+                category: "多語言支援 (Multilingual Support)",
+                question: "【多語言支援 (Multilingual Support)】How can Gemini's multilingual capabilities support **English Language Learners (ELLs)** in the classroom?",
+                questionEn: "How can Gemini's multilingual capabilities support **English Language Learners (ELLs)** in the classroom?",
+                options: ["Teachers can use Gemini to translate materials, provide bilingual glossaries, or simplify complex En...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Teachers can use Gemini to **translate materials**, provide **bilingual glossaries**, or simplify complex English texts while preserving meaning, helping ELLs access grade-level content.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Teachers can use Gemini to translate materials, provide bilingual glossaries, or simplify complex English texts while preserving meaning, helping ELLs access grade-level content."
+            },
+            {
+                id: 114,
+                type: "single",
+                category: "創意活動 (Creative Activities)",
+                question: "【創意活動 (Creative Activities)】What is a creative use case for Gemini in a literature class?",
+                questionEn: "What is a creative use case for Gemini in a literature class?",
+                options: ["Teachers can ask Gemini to generate alternative story endings, create character dialogue prompts, or...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Teachers can ask Gemini to **generate alternative story endings**, create **character dialogue prompts**, or write **poems in the style of famous authors** to inspire student creativity and literary analysis.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Teachers can ask Gemini to generate alternative story endings, create character dialogue prompts, or write poems in the style of famous authors to inspire student creativity and literary analysis."
+            },
+            {
+                id: 115,
+                type: "single",
+                category: "學術誠信 (Academic Integrity)",
+                question: "【學術誠信 (Academic Integrity)】What is a recommended approach to teach students about **responsible AI use** in academic work?",
+                questionEn: "What is a recommended approach to teach students about **responsible AI use** in academic work?",
+                options: ["Establish clear guidelines on when and how AI tools can be used (e.g., for brainstorming but not for...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Establish clear guidelines on when and how AI tools can be used (e.g., for brainstorming but not for final submission), require **citation of AI assistance**, and emphasize **original thinking and critical analysis**.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Establish clear guidelines on when and how AI tools can be used (e.g., for brainstorming but not for final submission), require citation of AI assistance, and emphasize original thinking and critical analysis."
+            },
+            {
+                id: 116,
+                type: "single",
+                category: "教師專業發展 (Teacher PD)",
+                question: "【教師專業發展 (Teacher PD)】How can educators use Gemini for their own **professional development**?",
+                questionEn: "How can educators use Gemini for their own **professional development**?",
+                options: ["Educators can use Gemini to research teaching strategies, generate sample lesson plans, explore new ...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Educators can use Gemini to **research teaching strategies**, generate **sample lesson plans**, explore **new pedagogical approaches**, or get suggestions for **classroom management techniques**, accelerating their learning and innovation.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Educators can use Gemini to research teaching strategies, generate sample lesson plans, explore new pedagogical approaches, or get suggestions for classroom management techniques, accelerating their learning and innovation."
+            },
+            {
+                id: 117,
+                type: "single",
+                category: "時間管理 (Time Management)",
+                question: "【時間管理 (Time Management)】What is one way Gemini can help teachers **save time** in their daily workflow?",
+                questionEn: "What is one way Gemini can help teachers **save time** in their daily workflow?",
+                options: ["Gemini can automate repetitive tasks such as generating parent communication templates, creating rub...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Gemini can **automate repetitive tasks** such as generating parent communication templates, creating rubrics, summarizing meeting notes, or formatting class schedules.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Gemini can automate repetitive tasks such as generating parent communication templates, creating rubrics, summarizing meeting notes, or formatting class schedules."
+            },
+            {
+                id: 118,
+                type: "single",
+                category: "課程調整 (Curriculum Adaptation)",
+                question: "【課程調整 (Curriculum Adaptation)】How can Gemini assist in adapting a curriculum for students with **special educational needs (SEN)**?",
+                questionEn: "How can Gemini assist in adapting a curriculum for students with **special educational needs (SEN)**?",
+                options: ["Teachers can ask Gemini to simplify instructions, create visual supports, generate step-by-step task...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Teachers can ask Gemini to **simplify instructions**, create **visual supports**, generate **step-by-step task breakdowns**, or suggest **alternative assessment formats** tailored to individual student needs.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Teachers can ask Gemini to simplify instructions, create visual supports, generate step-by-step task breakdowns, or suggest alternative assessment formats tailored to individual student needs."
+            },
+            {
+                id: 119,
+                type: "single",
+                category: "批判性思維 (Critical Thinking)",
+                question: "【批判性思維 (Critical Thinking)】Why should teachers encourage students to **fact-check** AI-generated information?",
+                questionEn: "Why should teachers encourage students to **fact-check** AI-generated information?",
+                options: ["To develop critical thinking and information literacy skills. Students need to learn that AI can pro...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["To develop **critical thinking** and **information literacy skills**. Students need to learn that AI can produce plausible but incorrect or biased information, making verification against reliable sources essential.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "To develop critical thinking and information literacy skills. Students need to learn that AI can produce plausible but incorrect or biased information, making verification against reliable sources essential."
+            },
+            {
+                id: 120,
+                type: "single",
+                category: "協作學習 (Collaborative Learning)",
+                question: "【協作學習 (Collaborative Learning)】How can Gemini facilitate **collaborative learning** among students?",
+                questionEn: "How can Gemini facilitate **collaborative learning** among students?",
+                options: ["Gemini can generate discussion prompts, create group project frameworks, suggest peer review criteri...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Gemini can generate **discussion prompts**, create **group project frameworks**, suggest **peer review criteria**, or help students **synthesize different viewpoints** during collaborative work.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Gemini can generate discussion prompts, create group project frameworks, suggest peer review criteria, or help students synthesize different viewpoints during collaborative work."
+            },
+            {
+                id: 121,
+                type: "single",
+                category: "內容個性化 (Content Personalization)",
+                question: "【內容個性化 (Content Personalization)】What is the advantage of using AI to create **personalized learning paths** for students?",
+                questionEn: "What is the advantage of using AI to create **personalized learning paths** for students?",
+                options: ["AI can analyze individual learning preferences, pace, and proficiency levels to suggest customized r...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["AI can analyze individual **learning preferences**, **pace**, and **proficiency levels** to suggest customized resources and activities, helping each student progress at their optimal rate.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "AI can analyze individual learning preferences, pace, and proficiency levels to suggest customized resources and activities, helping each student progress at their optimal rate."
+            },
+            {
+                id: 122,
+                type: "single",
+                category: "STEM 教學 (STEM Education)",
+                question: "【STEM 教學 (STEM Education)】How can Gemini support **STEM education** in the classroom?",
+                questionEn: "How can Gemini support **STEM education** in the classroom?",
+                options: ["Gemini can explain complex scientific concepts, generate math problem sets with worked solutions, cr...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Gemini can explain complex **scientific concepts**, generate **math problem sets** with worked solutions, create **coding examples**, or design **hands-on lab activity instructions**.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Gemini can explain complex scientific concepts, generate math problem sets with worked solutions, create coding examples, or design hands-on lab activity instructions."
+            },
+            {
+                id: 123,
+                type: "single",
+                category: "家長溝通 (Parent Communication)",
+                question: "【家長溝通 (Parent Communication)】How can Gemini help teachers improve **communication with parents**?",
+                questionEn: "How can Gemini help teachers improve **communication with parents**?",
+                options: ["Teachers can use Gemini to draft progress reports, create newsletter templates, translate messages i...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Teachers can use Gemini to draft **progress reports**, create **newsletter templates**, translate messages into **parents' native languages**, or generate **suggestions for parent-teacher conference topics**.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Teachers can use Gemini to draft progress reports, create newsletter templates, translate messages into parents' native languages, or generate suggestions for parent-teacher conference topics."
+            },
+            {
+                id: 124,
+                type: "single",
+                category: "教材設計 (Material Design)",
+                question: "【教材設計 (Material Design)】What is a practical application of Gemini in **designing instructional materials**?",
+                questionEn: "What is a practical application of Gemini in **designing instructional materials**?",
+                options: ["Teachers can use Gemini to create worksheets, graphic organizers, vocabulary lists, reading comprehe...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Teachers can use Gemini to create **worksheets**, **graphic organizers**, **vocabulary lists**, **reading comprehension questions**, or **interactive activities** aligned with learning objectives.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Teachers can use Gemini to create worksheets, graphic organizers, vocabulary lists, reading comprehension questions, or interactive activities aligned with learning objectives."
+            },
+            {
+                id: 125,
+                type: "single",
+                category: "認知負荷 (Cognitive Load)",
+                question: "【認知負荷 (Cognitive Load)】How can AI help reduce **cognitive load** for students learning new concepts?",
+                questionEn: "How can AI help reduce **cognitive load** for students learning new concepts?",
+                options: ["AI can chunk complex information into smaller, manageable pieces, provide step-by-step explanations,...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["AI can **chunk complex information** into smaller, manageable pieces, provide **step-by-step explanations**, use **analogies and examples**, and offer **visual representations** to support understanding.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "AI can chunk complex information into smaller, manageable pieces, provide step-by-step explanations, use analogies and examples, and offer visual representations to support understanding."
+            },
+            {
+                id: 126,
+                type: "single",
+                category: "實時支持 (Real-time Support)",
+                question: "【實時支持 (Real-time Support)】How can students use Gemini for **real-time homework help** responsibly?",
+                questionEn: "How can students use Gemini for **real-time homework help** responsibly?",
+                options: ["Students can ask Gemini to clarify concepts, explain steps in a problem, or provide hints rather tha...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Students can ask Gemini to **clarify concepts**, **explain steps in a problem**, or provide **hints** rather than direct answers, promoting **active learning** while maintaining academic integrity.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Students can ask Gemini to clarify concepts, explain steps in a problem, or provide hints rather than direct answers, promoting active learning while maintaining academic integrity."
+            },
+            {
+                id: 127,
+                type: "single",
+                category: "評鑑設計 (Assessment Design)",
+                question: "【評鑑設計 (Assessment Design)】What is a best practice when using AI to **design assessments**?",
+                questionEn: "What is a best practice when using AI to **design assessments**?",
+                options: ["Always review and validate AI-generated questions for accuracy, alignment with learning objectives, ...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Always **review and validate** AI-generated questions for accuracy, alignment with learning objectives, appropriate difficulty level, and absence of bias before using them with students.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Always review and validate AI-generated questions for accuracy, alignment with learning objectives, appropriate difficulty level, and absence of bias before using them with students."
+            },
+            {
+                id: 128,
+                type: "single",
+                category: "數位公民 (Digital Citizenship)",
+                question: "【數位公民 (Digital Citizenship)】What aspect of **digital citizenship** should be emphasized when teaching students about AI?",
+                questionEn: "What aspect of **digital citizenship** should be emphasized when teaching students about AI?",
+                options: ["Teach students about data privacy, ethical use, digital footprints, and the societal implications of...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Teach students about **data privacy**, **ethical use**, **digital footprints**, and the **societal implications** of AI technologies, preparing them to be responsible digital citizens.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Teach students about data privacy, ethical use, digital footprints, and the societal implications of AI technologies, preparing them to be responsible digital citizens."
+            },
+            {
+                id: 129,
+                type: "single",
+                category: "資訊素養 (Information Literacy)",
+                question: "【資訊素養 (Information Literacy)】Why is **information literacy** crucial in the age of AI?",
+                questionEn: "Why is **information literacy** crucial in the age of AI?",
+                options: ["Students must learn to evaluate sources, identify bias, cross-reference information, and distinguish...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Students must learn to **evaluate sources**, **identify bias**, **cross-reference information**, and **distinguish between credible and unreliable content**, skills essential for navigating AI-generated information.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Students must learn to evaluate sources, identify bias, cross-reference information, and distinguish between credible and unreliable content, skills essential for navigating AI-generated information."
+            },
+            {
+                id: 130,
+                type: "single",
+                category: "資料最小化 (Data Minimization)",
+                question: "【資料最小化 (Data Minimization)】What does the principle of **data minimization** mean when using AI in education?",
+                questionEn: "What does the principle of **data minimization** mean when using AI in education?",
+                options: ["Only input the minimum necessary information to accomplish the task, avoiding unnecessary sharing of...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Only input the **minimum necessary information** to accomplish the task, avoiding unnecessary sharing of student personal data, grades, or other sensitive information to protect privacy.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Only input the minimum necessary information to accomplish the task, avoiding unnecessary sharing of student personal data, grades, or other sensitive information to protect privacy."
+            },
+            {
+                id: 131,
+                type: "single",
+                category: "輔助功能 (Accessibility)",
+                question: "【輔助功能 (Accessibility)】How can a teacher use Gemini's Multimodal capabilities to support a visually impaired student accessing a math textbook diagram?",
+                questionEn: "How can a teacher use Gemini's Multimodal capabilities to support a visually impaired student accessing a math textbook diagram?",
+                options: ["The teacher can upload the image of the diagram and ask Gemini to generate a detailed, descriptive t...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["The teacher can upload the image of the diagram and ask Gemini to generate a **detailed, descriptive text transcript** of the visual information.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "The teacher can upload the image of the diagram and ask Gemini to generate a detailed, descriptive text transcript of the visual information."
+            },
+            {
+                id: 132,
+                type: "single",
+                category: "AI 倫理 (AI Ethics)",
+                question: "【AI 倫理 (AI Ethics)】Why is **transparency** important when using AI-generated assessments or content in the classroom?",
+                questionEn: "Why is **transparency** important when using AI-generated assessments or content in the classroom?",
+                options: ["Teachers and students must be aware of *how* the AI arrived at a specific conclusion or grading deci...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Teachers and students must be aware of *how* the AI arrived at a specific conclusion or grading decision to maintain **trust** and ensure **fairness**.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Teachers and students must be aware of *how* the AI arrived at a specific conclusion or grading decision to maintain trust and ensure fairness."
+            },
+            {
+                id: 133,
+                type: "single",
+                category: "模型選擇 (Model Choice)",
+                question: "【模型選擇 (Model Choice)】What is the main difference between Gemini Flash and Gemini Pro, making Flash suitable for quick, high-volume tasks?",
+                questionEn: "What is the main difference between Gemini Flash and Gemini Pro, making Flash suitable for quick, high-volume tasks?",
+                options: ["Gemini Flash is optimized for speed and efficiency, handling high-volume, low-latency tasks, whereas...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["**Gemini Flash** is optimized for **speed and efficiency**, handling high-volume, low-latency tasks, whereas **Gemini Pro** is optimized for **complex reasoning** and higher quality output.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Gemini Flash is optimized for speed and efficiency, handling high-volume, low-latency tasks, whereas Gemini Pro is optimized for complex reasoning and higher quality output."
+            },
+            {
+                id: 134,
+                type: "single",
+                category: "IP/版權 (IP/Copyright)",
+                question: "【IP/版權 (IP/Copyright)】If a student uses Gemini to generate unique background music for a video project, what general rule applies regarding the intellectual property of that music?",
+                questionEn: "If a student uses Gemini to generate unique background music for a video project, what general rule applies regarding the intellectual property of that music?",
+                options: ["The generated output is typically owned by the user (the student), but the use must comply with Goog...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["The generated output is typically owned by the **user** (the student), but the use must comply with Google's Terms of Service regarding generated content.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "The generated output is typically owned by the user (the student), but the use must comply with Google's Terms of Service regarding generated content."
+            },
+            {
+                id: 135,
+                type: "single",
+                category: "應用情境 (Use Case)",
+                question: "【應用情境 (Use Case)】Instead of asking Gemini to write a full report, what technique helps the student use the AI as a 'Co-Pilot' for improving their own written draft?",
+                questionEn: "Instead of asking Gemini to write a full report, what technique helps the student use the AI as a 'Co-Pilot' for improving their own written draft?",
+                options: ["The student should provide their existing draft and ask Gemini for critique, revision suggestions, o...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["The student should provide their existing draft and ask Gemini for **critique, revision suggestions, or grammatical improvements** (acting as an editor).", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "The student should provide their existing draft and ask Gemini for critique, revision suggestions, or grammatical improvements (acting as an editor)."
+            },
+            {
+                id: 136,
+                type: "single",
+                category: "AI 流程 (AI Workflow)",
+                question: "【AI 流程 (AI Workflow)】What term describes the continuous cycle where human experts review AI outputs and provide corrections to iteratively improve the model's performance?",
+                questionEn: "What term describes the continuous cycle where human experts review AI outputs and provide corrections to iteratively improve the model's performance?",
+                options: ["Human-in-the-Loop (HITL) feedback. This is crucial for fixing persistent errors and improving safety...", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["**Human-in-the-Loop (HITL)** feedback. This is crucial for fixing persistent errors and improving safety filters.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Human-in-the-Loop (HITL) feedback. This is crucial for fixing persistent errors and improving safety filters."
+            },
+            {
+                id: 137,
+                type: "single",
+                category: "模型精調 (Model Refinement)",
+                question: "【模型精調 (Model Refinement)】What is the basic concept of **fine-tuning** an AI model for educational use after its initial training phase?",
+                questionEn: "What is the basic concept of **fine-tuning** an AI model for educational use after its initial training phase?",
+                options: ["Taking a pre-trained general model and further training it on a smaller, highly specific dataset (e....", "AI 模型會自動優化所有輸出,無需人工審查或干預即可確保完全準確性", "此功能主要用於提高處理速度,但會犧牲輸出品質和內容準確性", "教師應該直接使用 AI 生成的內容,避免修改以保持 AI 的原始輸出"],
+                optionsEn: ["Taking a pre-trained general model and further training it on a smaller, highly specific dataset (e.g., K-12 curriculum or specific school policy documents) to specialize its knowledge.", "AI models automatically optimize all outputs without need for human review or intervention", "This feature primarily improves processing speed but compromises output quality and accuracy", "Teachers should directly use AI-generated content and avoid modifications to preserve original output"],
+                correct: [0],
+                explanation: "Taking a pre-trained general model and further training it on a smaller, highly specific dataset (e.g., K-12 curriculum or specific school policy documents) to specialize its knowledge."
             }
         ];
         
@@ -1750,7 +2266,7 @@
             return (
                 <div className="app-container">
                     <div className="header">
-                        <h1>🎓 Gemini Certification for Educators - 完整版</h1>
+                        <h1>🎓 Gemini Certification for Educators - 練習題庫</h1>
                         <p>單選題 | 多選題 | 是非題 | 中英對照 | 隨機題庫</p>
                     </div>
                     
@@ -1796,6 +2312,13 @@
                         >
                             ✏️ 模擬練習
                         </button>
+                        <button 
+                            className={`tab ${currentTab === 'flashcards' ? 'active' : ''}`}
+                            onClick={() => setCurrentTab('flashcards')}
+                        >
+                            🎴 閃卡練習
+                        </button>
+
                     </div>
                     
                     <div className="content">
@@ -1986,6 +2509,16 @@
                                         )}
                                     </div>
                                 </div>
+                            </div>
+                        )}
+                        
+                        {currentTab === 'flashcards' && (
+                            <div>
+                                <div style={{textAlign: 'center', marginBottom: '30px'}}>
+                                    <h2 style={{color: '#667eea', marginBottom: '10px'}}>🎴 閃卡練習模式</h2>
+                                    <p style={{color: '#6c757d'}}>翻轉卡片學習 Gemini Educator 核心概念</p>
+                                </div>
+                                <FlashcardContent />
                             </div>
                         )}
                         
