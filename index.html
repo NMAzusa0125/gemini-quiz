@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content-width, initial-scale=1.0">
-    <title>Gemini Certification for Educators - 練習題庫</title>
+    <title>Gemini Certification for Educators - 完整版練習</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -595,10 +595,42 @@
             
             const cards = [
                 { topic: "提示工程", q: "When crafting an effective prompt for Gemini, what does the 'T' stand for in the C.A.S.T. framework?", a: "The 'T' stands for Tone. The C.A.S.T. framework components are: Context, Action, Specifics, and Tone." },
-                { topic: "負責任 AI", q: "What are the two most critical ethical considerations when using generative AI in the classroom?", a: "Data privacy and security (protecting student information) and ensuring factual accuracy and verification." },
-                { topic: "Gemini 功能", q: "What term describes Gemini's ability to process multiple data types within a single prompt?", a: "Multimodality. This is a key feature distinguishing it from traditional language models." },
-                { topic: "教學規劃", q: "How can a teacher use Gemini to quickly prepare a 'tiered lesson plan'?", a: "Provide the topic, grade level, and differentiation levels, asking Gemini to create activities tailored to varying difficulty." },
-                { topic: "學生規範", q: "What policy should schools establish before allowing students to use generative AI tools?", a: "An Acceptable Use Policy (AUP) or AI Usage Guidelines defining academic integrity and permissible uses." }
+                { topic: "負責任的 AI", q: "What are the two most critical ethical considerations when using generative AI in the classroom?", a: "Data privacy and security (protecting student information) and ensuring factual accuracy and verification (to mitigate against hallucinations or biased content)." },
+                { topic: "Gemini 核心功能", q: "What term describes Gemini's ability to process multiple data types—such as text, images, and audio—within a single prompt?", a: "Multimodality. This is a key feature distinguishing it from traditional language models." },
+                { topic: "教學規劃應用", q: "How can a teacher use Gemini to quickly prepare a 'tiered lesson plan'?", a: "The teacher can provide the topic, student grade level, and required levels of differentiation, asking Gemini to create a table or list of activities tailored to varying difficulty or learning styles." },
+                { topic: "學生使用規範", q: "What policy should schools establish before allowing students to use generative AI tools?", a: "An Acceptable Use Policy (AUP) or specific AI Usage Guidelines, which define academic integrity and the permissible uses of the tool." },
+                { topic: "評估應用", q: "What is one major concern if a teacher directly uses unmodified AI-generated test questions in a high-stakes exam?", a: "Hallucinations or inaccuracies that may misrepresent key concepts. Additionally, AI-generated questions might not align perfectly with specific learning objectives or standards, requiring teacher review and validation." },
+                { topic: "數據保護", q: "Why should educators avoid uploading sensitive student records directly to generative AI tools?", a: "Privacy and data security compliance (FERPA, GDPR). These regulations prohibit sharing personally identifiable or sensitive information without proper safeguards and consent." },
+                { topic: "教學差異化", q: "How can a teacher use Gemini to provide scaffolded reading materials for students at different reading levels?", a: "The teacher can input the core text and ask Gemini to rewrite it at specified reading levels (e.g., Grade 4, Grade 7, Grade 10), adjusting vocabulary and sentence complexity while maintaining core concepts." },
+                { topic: "AI 偏見", q: "Why is it important for teachers to check AI-generated content for cultural bias or stereotypes?", a: "AI models are trained on vast datasets that can include societal biases. If left unchecked, the AI might produce materials that inadvertently reinforce stereotypes or exclude certain cultural perspectives." },
+                { topic: "提示詞最佳實踐", q: "What is the benefit of including few-shot examples in a prompt?", a: "Few-shot examples (2-3 sample inputs and outputs) help Gemini understand the desired format, style, and level of detail, significantly improving output quality and consistency." },
+                { topic: "學生參與", q: "What is one effective strategy for using AI to increase student engagement in writing?", a: "Allow students to use AI as a brainstorming partner or research assistant to generate ideas and outlines, but require them to write, revise, and critically evaluate the final content themselves." },
+                { topic: "回饋生成", q: "How can teachers use Gemini to provide formative feedback on student drafts efficiently?", a: "Teachers can input student writing and ask Gemini to identify strengths, areas for improvement, and specific suggestions (e.g., thesis clarity, evidence use, grammar). The teacher then reviews and personalizes this feedback." },
+                { topic: "多語言支援", q: "How can Gemini's multilingual capabilities support English Language Learners (ELLs)?", a: "Teachers can use Gemini to translate materials, provide bilingual glossaries, or simplify complex English texts while preserving meaning, helping ELLs access grade-level content." },
+                { topic: "創意活動", q: "What is a creative use case for Gemini in a literature class?", a: "Teachers can ask Gemini to generate alternative story endings, create character dialogue prompts, or write poems in the style of famous authors to inspire student creativity and literary analysis." },
+                { topic: "學術誠信", q: "What is a recommended approach to teach students about responsible AI use in academic work?", a: "Establish clear guidelines on when and how AI tools can be used (e.g., for brainstorming but not for final submission), require citation of AI assistance, and emphasize original thinking and critical analysis." },
+                { topic: "教師專業發展", q: "How can educators use Gemini for their own professional development?", a: "Educators can use Gemini to research teaching strategies, generate sample lesson plans, explore new pedagogical approaches, or get suggestions for classroom management techniques, accelerating their learning and innovation." },
+                { topic: "時間管理", q: "What is one way Gemini can help teachers save time in their daily workflow?", a: "Gemini can automate repetitive tasks such as generating parent communication templates, creating rubrics, summarizing meeting notes, or formatting class schedules." },
+                { topic: "課程調整", q: "How can Gemini assist in adapting a curriculum for students with special educational needs (SEN)?", a: "Teachers can ask Gemini to simplify instructions, create visual supports, generate step-by-step task breakdowns, or suggest alternative assessment formats tailored to individual student needs." },
+                { topic: "批判性思維", q: "Why should teachers encourage students to fact-check AI-generated information?", a: "To develop critical thinking and information literacy skills. Students need to learn that AI can produce plausible but incorrect or biased information, making verification against reliable sources essential." },
+                { topic: "協作學習", q: "How can Gemini facilitate collaborative learning among students?", a: "Gemini can generate discussion prompts, create group project frameworks, suggest peer review criteria, or help students synthesize different viewpoints during collaborative work." },
+                { topic: "內容個性化", q: "What is the advantage of using AI to create personalized learning paths for students?", a: "AI can analyze individual learning preferences, pace, and proficiency levels to suggest customized resources and activities, helping each student progress at their optimal rate." },
+                { topic: "STEM 教學", q: "How can Gemini support STEM education in the classroom?", a: "Gemini can explain complex scientific concepts, generate math problem sets with worked solutions, create coding examples, or design hands-on lab activity instructions." },
+                { topic: "家長溝通", q: "How can Gemini help teachers improve communication with parents?", a: "Teachers can use Gemini to draft progress reports, create newsletter templates, translate messages into parents' native languages, or generate suggestions for parent-teacher conference topics." },
+                { topic: "教材設計", q: "What is a practical application of Gemini in designing instructional materials?", a: "Teachers can use Gemini to create worksheets, graphic organizers, vocabulary lists, reading comprehension questions, or interactive activities aligned with learning objectives." },
+                { topic: "認知負荷", q: "How can AI help reduce cognitive load for students learning new concepts?", a: "AI can chunk complex information into smaller, manageable pieces, provide step-by-step explanations, use analogies and examples, and offer visual representations to support understanding." },
+                { topic: "實時支持", q: "How can students use Gemini for real-time homework help responsibly?", a: "Students can ask Gemini to clarify concepts, explain steps in a problem, or provide hints rather than direct answers, promoting active learning while maintaining academic integrity." },
+                { topic: "評鑑設計", q: "What is a best practice when using AI to design assessments?", a: "Always review and validate AI-generated questions for accuracy, alignment with learning objectives, appropriate difficulty level, and absence of bias before using them with students." },
+                { topic: "數位公民", q: "What aspect of digital citizenship should be emphasized when teaching students about AI?", a: "Teach students about data privacy, ethical use, digital footprints, and the societal implications of AI technologies, preparing them to be responsible digital citizens." },
+                { topic: "資訊素養", q: "Why is information literacy crucial in the age of AI?", a: "Students must learn to evaluate sources, identify bias, cross-reference information, and distinguish between credible and unreliable content—skills essential for navigating AI-generated information." },
+                { topic: "資料最小化", q: "What does the principle of data minimization mean when using AI in education?", a: "Only input the minimum necessary information to accomplish the task, avoiding unnecessary sharing of student personal data, grades, or other sensitive information to protect privacy." },
+                { topic: "輔助功能", q: "How can a teacher use Gemini's Multimodal capabilities to support a visually impaired student?", a: "The teacher can upload the image of a diagram and ask Gemini to generate a detailed, descriptive text transcript of the visual information." },
+                { topic: "AI 倫理", q: "Why is transparency important when using AI-generated assessments or content?", a: "Teachers and students must be aware of how the AI arrived at a specific conclusion or grading decision to maintain trust and ensure fairness." },
+                { topic: "模型選擇", q: "What is the main difference between Gemini Flash and Gemini Pro?", a: "Gemini Flash is optimized for speed and efficiency, handling high-volume, low-latency tasks, whereas Gemini Pro is optimized for complex reasoning and higher quality output." },
+                { topic: "IP/版權", q: "If a student uses Gemini to generate unique background music for a video project, who owns the intellectual property?", a: "The generated output is typically owned by the user (the student), but the use must comply with Google's Terms of Service regarding generated content." },
+                { topic: "應用情境", q: "Instead of asking Gemini to write a full report, what technique helps students use AI as a 'Co-Pilot'?", a: "The student should provide their existing draft and ask Gemini for critique, revision suggestions, or grammatical improvements (acting as an editor)." },
+                { topic: "AI 流程", q: "What term describes the continuous cycle where human experts review AI outputs and provide corrections?", a: "Human-in-the-Loop (HITL) feedback. This is crucial for fixing persistent errors and improving safety filters." },
+                { topic: "模型精調", q: "What is the basic concept of fine-tuning an AI model for educational use?", a: "Taking a pre-trained general model and further training it on a smaller, highly specific dataset (e.g., K-12 curriculum or specific school policy documents) to specialize its knowledge." }
             ];
             
             return (
@@ -696,7 +728,7 @@
 
         const { useState, useEffect } = React;
         
-        // 練習題庫 - 包含單選、多選、是非題,所有選項長度相近且具迷惑性
+        // 完整題庫 - 包含單選、多選、是非題,所有選項長度相近且具迷惑性
         const allQuestions = [
             // ===== 是非題 =====
             {
@@ -2266,7 +2298,7 @@
             return (
                 <div className="app-container">
                     <div className="header">
-                        <h1>🎓 Gemini Certification for Educators - 練習題庫</h1>
+                        <h1>🎓 Gemini Certification for Educators - 完整版</h1>
                         <p>單選題 | 多選題 | 是非題 | 中英對照 | 隨機題庫</p>
                     </div>
                     
